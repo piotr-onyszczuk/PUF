@@ -41,6 +41,9 @@ begin						-- poczatek czesci wykonawczej
 			STOP_P <= 0;
 			PAR <= 0;
 			status <= czekaj;
+			ERROR <= '0';
+			DONE <= '0';
+			timer <= 0;
 	elsif (C'event and C='1') then 
 		if (timer /= time_t) then 
 			timer <= timer +1;
@@ -48,34 +51,32 @@ begin						-- poczatek czesci wykonawczej
 		 timer <= 0;
 		if  (status = data) then
 			if ( S /= word_len ) then
-				VAL <= '1';
-				U <= D(S);
+				D(S) <= RX;
 				S <= S+1;
 			else
-				VAL <= '0';
-				U <= '0';
 				status <= parzystosc;
-				PAR <= 0;
 			end if;
 		elsif (status = parzystosc) then
 			if ( PAR /= par_len) then
-				VAL <= f_par;
 				PAR <= PAR+1;
-			else
-				PAR <= 0;			
+				if (wejscie(1) = XOR_REDUCE(bufor)) then
+					ERROR <= '1';
+				end if;
+			else		
 				status <= stop;
 			end if;
 		elsif (status = stop) then
 			if ( STOP_P /= stop_len) then
 				STOP_P <= STOP_P + 1;
 			else 
-				STOP_P <= 0;
-				VAL <= '0';
+				if(ERROR /= '1') then
+					DONE <= '1';
+				end if;
 				status <= czekaj;
 			end if;
-		elsif (status = czekaj and ST = '1') then
-			S <=word_len +1 ;
-			U <= '0';
+		elsif (status = czekaj and VAL = '1') then
+			S <= 0;
+			D(S) <= (others => '0');
 			STOP_P <= 0;
 			PAR <= 0;
 			status <= data;
