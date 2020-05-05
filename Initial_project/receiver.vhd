@@ -12,13 +12,13 @@ entity RECEIVER is				-- deklaracja sprzegu IEEE_CONV'
 	 f_par : bit := '0'
   );
   port (
-    D		:in  bit_vector ( 0 to word_len - 1 );	-- wejscie danych 'D'
+    D		:out  bit_vector ( word_len - 1 downto 0  );	-- wejscie danych 'D'
 	 C    :in  bit; --clock
-	 R    :in  bit; --clock
-	 ST   :in bit; --rozpoczecie nadawania 
-    U		:out bit;	-- wyjscie danych 'U'
-    VAL		:out bit;	-- wyjscie nadaje
-	 TX :in bit
+	 R    :in  bit; --reset
+    RX		:in bit;	-- wejscie danych 'RX'
+    VAL		:in bit;	-- wejscie nadaje
+	 ERROR : out bit; --error
+	 DONE : out bit --gotowe
   );
 end RECEIVER;
 
