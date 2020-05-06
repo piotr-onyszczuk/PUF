@@ -19,7 +19,8 @@ entity RECEIVER is				-- deklaracja sprzegu IEEE_CONV'
     RX		:in std_logic;	-- wejscie danych 'RX'
     VAL		:in std_logic;	-- wejscie nadaje
 	 ERROR : out std_logic; --error
-	 DONE : out std_logic --gotowe
+	 DONE : out std_logic; --gotowe
+	 pisze :out bit
   );
 end RECEIVER;
 
@@ -44,6 +45,7 @@ begin						-- poczatek czesci wykonawczej
 			blad := '0';
 			DONE <= '0';
 			timer <= 0;
+			pisze <='0';
 			bufor <=(others => '0');
 			D <= (others =>'0');
 	elsif (C'event and C='1') then 
@@ -56,7 +58,9 @@ begin						-- poczatek czesci wykonawczej
 					if ( S /= word_len ) then
 						bufor(S) <= RX;
 						S <= S+1;
+						pisze <= '1';
 					else
+						pisze<='0';
 						status <= parzystosc;
 					end if;
 				end if;

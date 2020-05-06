@@ -5,7 +5,7 @@ use     ieee.std_logic_misc.all;
 
 entity RECEIVER_TB is
   generic (
-    constant clock_speed   :natural := 20_000_000;		-- czestotliwosc zegara systemowego w [Hz]
+    constant clock_speed   :natural := 30_000_000;		-- czestotliwosc zegara systemowego w [Hz]
     constant bod       		:natural := 5_000_000;		-- predkosc nadawania w [bodach]
     constant word_len      :natural := 8;			-- liczba bitow slowa danych (5-8)
     constant par_len    	:natural := 1;			-- liczba bitow parzystosci (0-1)
@@ -27,7 +27,8 @@ architecture behavioural of RECEIVER_TB is
   signal   VAL	   :std_logic;				-- obserwowane wyjscie 'GOTOWE'
   signal   ERROR	:std_logic;				-- obserwowane wyjscie 'GOTOWE'
   signal   DONE	:std_logic;				-- obserwowane wyjscie 'BLAD'
-  signal   D		:std_logic_vector(word_len-1 downto 0);		-- symulowana dana transmitowana
+  signal   D		:std_logic_vector(word_len-1 downto 0) :="00000000";		-- symulowana dana transmitowana
+  signal pisze    :bit;
   
 begin
 
@@ -47,8 +48,8 @@ begin
   begin								-- czesc wykonawcza procesu
 	VAL<='0';
     RX <= '0';					-- incjalizacja sygnalu 'RX' na wartosci spoczynkowa
-	 SLOWO <= "11111111";
-    D  <= (others => '0');					-- wyzerowanie sygnalu 'D'
+	 SLOWO <= "00111001";
+   -- D  <= (others => '0');					-- wyzerowanie sygnalu 'D'
     wait for 200 ns;						-- odczekanie 200 ns
     loop							-- rozpoczecie petli nieskonczonej
       VAL <= '1';					-- ustawienie 'RX' na wartosc bitu START
@@ -87,8 +88,8 @@ begin
 		RX                   => RX,				-- odebrany sygnal szeregowy
       VAL                	=> VAL,				-- odebrane slowo danych
       ERROR               	=> ERROR,				-- flaga potwierdzenia odbioru
-      DONE                 => DONE				-- flaga wykrycia bledu w odbiorze
-
+      DONE                 => DONE,				-- flaga wykrycia bledu w odbiorze
+pisze =>pisze
     );
 
 end behavioural;

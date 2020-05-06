@@ -6,3 +6,4 @@ xst -intstyle ise -ifn "/home/ise/Desktop/PUF/Initial_project/RECEIVER.xst" -ofn
 xst -intstyle ise -ifn "/home/ise/Desktop/PUF/Initial_project/RECEIVER.xst" -ofn "/home/ise/Desktop/PUF/Initial_project/RECEIVER.syr" 
 xst -intstyle ise -ifn "/home/ise/Desktop/PUF/Initial_project/RECEIVER.xst" -ofn "/home/ise/Desktop/PUF/Initial_project/RECEIVER.syr" 
 xst -intstyle ise -ifn "/home/ise/Desktop/PUF/Initial_project/RECEIVER.xst" -ofn "/home/ise/Desktop/PUF/Initial_project/RECEIVER.syr" 
+xst -intstyle ise -ifn "/home/ise/Desktop/PUF/Initial_project/RECEIVER.xst" -ofn "/home/ise/Desktop/PUF/Initial_project/RECEIVER.syr" 

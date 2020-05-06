@@ -5,10 +5,7 @@
      behavior or data corruption.  It is strongly advised that
      users do not edit the contents of this file. -->
 <messages>
-<msg type="warning" file="HDLCompiler" num="92" delta="new" >"/home/ise/Desktop/PUF/Initial_project/receiver.vhd" Line 41: <arg fmt="%s" index="1">rx</arg> should be on the sensitivity list of the process
-</msg>
-
-<msg type="warning" file="HDLCompiler" num="92" delta="old" >"/home/ise/Desktop/PUF/Initial_project/receiver.vhd" Line 107: <arg fmt="%s" index="1">bufor</arg> should be on the sensitivity list of the process
+<msg type="warning" file="HDLCompiler" num="92" delta="old" >"/home/ise/Desktop/PUF/Initial_project/receiver.vhd" Line 109: <arg fmt="%s" index="1">bufor</arg> should be on the sensitivity list of the process
 </msg>
 
 <msg type="info" file="Xst" num="1799" delta="old" >State <arg fmt="%s" index="1">stop</arg> is never reached in FSM &lt;<arg fmt="%s" index="2">status</arg>&gt;.
