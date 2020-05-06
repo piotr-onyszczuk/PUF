@@ -5,5 +5,14 @@
      behavior or data corruption.  It is strongly advised that
      users do not edit the contents of this file. -->
 <messages>
+<msg type="error" file="HDLCompiler" num="69" delta="old" >"/home/ise/Desktop/PUF/Initial_project/receiver.vhd" Line 62: &lt;<arg fmt="%s" index="1">wejscie</arg>&gt; is not declared.
+</msg>
+
+<msg type="error" file="HDLCompiler" num="845" delta="old" >"/home/ise/Desktop/PUF/Initial_project/receiver.vhd" Line 79: Type of aggregate cannot be determined without context ; <arg fmt="%d" index="1">0</arg> visible types match here
+</msg>
+
+<msg type="error" file="HDLCompiler" num="854" delta="old" >"/home/ise/Desktop/PUF/Initial_project/receiver.vhd" Line 25: Unit &lt;<arg fmt="%s" index="1">cialo</arg>&gt; ignored due to previous errors.
+</msg>
+
 </messages>
 

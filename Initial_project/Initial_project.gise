@@ -25,9 +25,18 @@
     <file xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="RECEIVER.prj"/>
     <file xil_pn:fileType="FILE_XST_STX" xil_pn:name="RECEIVER.stx"/>
     <file xil_pn:fileType="FILE_XST" xil_pn:name="RECEIVER.xst"/>
+    <file xil_pn:fileType="FILE_CMD_LOG" xil_pn:name="RECEIVER_TB.cmd_log"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_LSO" xil_pn:name="RECEIVER_TB.lso"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="RECEIVER_TB.prj"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_XST_REPORT" xil_pn:name="RECEIVER_TB.syr"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_XST" xil_pn:name="RECEIVER_TB.xst"/>
+    <file xil_pn:fileType="FILE_HTML" xil_pn:name="RECEIVER_TB_envsettings.html"/>
+    <file xil_pn:fileType="FILE_HTML" xil_pn:name="RECEIVER_TB_summary.html"/>
+    <file xil_pn:fileType="FILE_XRPT" xil_pn:name="RECEIVER_TB_xst.xrpt"/>
     <file xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="RECEIVER_stx_beh.prj"/>
     <file xil_pn:fileType="FILE_XMSGS" xil_pn:name="_xmsgs/xst.xmsgs"/>
     <file xil_pn:fileType="FILE_DIRECTORY" xil_pn:name="isim"/>
+    <file xil_pn:fileType="FILE_FITTER_REPORT" xil_pn:name="webtalk_pn.xml"/>
     <file xil_pn:fileType="FILE_INI" xil_pn:name="xilinxsim.ini"/>
     <file xil_pn:fileType="FILE_DIRECTORY" xil_pn:name="xst"/>
   </files>
@@ -40,8 +49,52 @@
     <transform xil_pn:end_ts="1588693583" xil_pn:in_ck="-6674324246746219249" xil_pn:name="TRAN_copyAbstractToPostAbstractSimulation" xil_pn:start_ts="1588693583">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
+      <status xil_pn:value="OutOfDateForInputs"/>
+      <status xil_pn:value="OutOfDateForOutputs"/>
+      <status xil_pn:value="InputChanged"/>
+      <status xil_pn:value="OutputChanged"/>
       <outfile xil_pn:name="receiver.vhd"/>
       <outfile xil_pn:name="receiver_behav.vhd"/>
+    </transform>
+    <transform xil_pn:end_ts="1588782499" xil_pn:name="TRAN_copyInitialToXSTAbstractSynthesis" xil_pn:start_ts="1588782499">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+    </transform>
+    <transform xil_pn:end_ts="1588782499" xil_pn:name="TRAN_schematicsToHdl" xil_pn:prop_ck="8062014279485214232" xil_pn:start_ts="1588782499">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+    </transform>
+    <transform xil_pn:end_ts="1588782499" xil_pn:name="TRAN_regenerateCores" xil_pn:prop_ck="-4134933328659210311" xil_pn:start_ts="1588782499">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+    </transform>
+    <transform xil_pn:end_ts="1588782499" xil_pn:name="TRAN_SubProjectAbstractToPreProxy" xil_pn:start_ts="1588782499">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+    </transform>
+    <transform xil_pn:end_ts="1588782499" xil_pn:name="TRAN_xawsTohdl" xil_pn:prop_ck="-5510125051084410260" xil_pn:start_ts="1588782499">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+    </transform>
+    <transform xil_pn:end_ts="1588782499" xil_pn:name="TRAN_SubProjectPreToStructuralProxy" xil_pn:prop_ck="5702940744460053484" xil_pn:start_ts="1588782499">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+    </transform>
+    <transform xil_pn:end_ts="1588782499" xil_pn:name="TRAN_platgen" xil_pn:prop_ck="-7746392620807928061" xil_pn:start_ts="1588782499">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+    </transform>
+    <transform xil_pn:end_ts="1588782519" xil_pn:in_ck="-6674324246746219249" xil_pn:name="TRANEXT_xstsynthesize_virtex6" xil_pn:prop_ck="9206463042322334851" xil_pn:start_ts="1588782499">
+      <status xil_pn:value="FailedRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+      <outfile xil_pn:name="RECEIVER_TB.lso"/>
+      <outfile xil_pn:name="RECEIVER_TB.prj"/>
+      <outfile xil_pn:name="RECEIVER_TB.syr"/>
+      <outfile xil_pn:name="RECEIVER_TB.xst"/>
+      <outfile xil_pn:name="RECEIVER_TB_xst.xrpt"/>
+      <outfile xil_pn:name="_xmsgs/xst.xmsgs"/>
+      <outfile xil_pn:name="webtalk_pn.xml"/>
+      <outfile xil_pn:name="xst"/>
     </transform>
   </transforms>
 

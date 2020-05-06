@@ -22,10 +22,11 @@ architecture behavioural of RECEIVER_TB is
 
   signal   R		:std_logic := '0';			-- symulowany sygnal resetujacacy
   signal   C		:std_logic := '1';			-- symulowany zegar taktujacy inicjowany na '1'
-  signal   TX		:std_logic;				-- symulowane wejscie 'RX'
+  signal   RX		:std_logic;				-- symulowane wejscie 'RX'
   signal   SLOWO	:std_logic_vector(B_SLOWA-1 downto 0);	-- obserwowane wyjscie 'SLOWO'
-  signal   GOTOWE	:std_logic;				-- obserwowane wyjscie 'GOTOWE'
-  signal   BLAD	:std_logic;				-- obserwowane wyjscie 'BLAD'
+  signal   VAL	   :std_logic;				-- obserwowane wyjscie 'GOTOWE'
+  signal   ERROR	:std_logic;				-- obserwowane wyjscie 'GOTOWE'
+  signal   DONE	:std_logic;				-- obserwowane wyjscie 'BLAD'
   signal   D		:std_logic_vector(SLOWO'range);		-- symulowana dana transmitowana
   
 begin
@@ -84,10 +85,12 @@ begin
     port map(							-- mapowanie sygnalow do portow
       R                    => R,				-- sygnal resetowania
       C                    => C,				-- zegar taktujacy
-      TX                   => TX,				-- odebrany sygnal szeregowy
-      SLOWO                => SLOWO,				-- odebrane slowo danych
-      GOTOWE               => GOTOWE,				-- flaga potwierdzenia odbioru
-      BLAD                 => BLAD				-- flaga wykrycia bledu w odbiorze
+		D							=> D,
+		RX                   => RX,				-- odebrany sygnal szeregowy
+      VAL                	=> VAL,				-- odebrane slowo danych
+      ERROR               	=> ERROR,				-- flaga potwierdzenia odbioru
+      DONE                 => DONE				-- flaga wykrycia bledu w odbiorze
+
     );
 
 end behavioural;
