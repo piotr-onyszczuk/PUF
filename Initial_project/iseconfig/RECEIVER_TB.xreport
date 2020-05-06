@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <report-views version="2.0" >
  <header>
-  <DateModified>2020-05-05T18:48:06</DateModified>
+  <DateModified>2020-05-06T16:16:00</DateModified>
   <ModuleName>RECEIVER_TB</ModuleName>
   <SummaryTimeStamp>Unknown</SummaryTimeStamp>
-  <SavedFilePath>C:/Users/miles/Desktop/sem6/PUF2/PUF/Initial_project/iseconfig/RECEIVER_TB.xreport</SavedFilePath>
-  <ImplementationReportsDirectory>C:/Users/miles/Desktop/sem6/PUF2/PUF/Initial_project</ImplementationReportsDirectory>
+  <SavedFilePath>/home/ise/Desktop/PUF/Initial_project/iseconfig/RECEIVER_TB.xreport</SavedFilePath>
+  <ImplementationReportsDirectory>/home/ise/Desktop/PUF/Initial_project/</ImplementationReportsDirectory>
   <DateInitialized>2020-05-05T18:48:06</DateInitialized>
   <EnableMessageFiltering>false</EnableMessageFiltering>
  </header>

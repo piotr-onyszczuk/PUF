@@ -30,6 +30,7 @@ architecture cialo of RECEIVER is		-- deklaracja ciala 'cialo' architektury
 	signal STOP_P : natural range 0 to stop_len;
 	signal timer : natural range 0 to clock_speed/bod;
 	constant time_t : natural := clock_speed/bod;
+	variable blad : bit := '0';
 begin						-- poczatek czesci wykonawczej
 
 	
@@ -37,11 +38,10 @@ begin						-- poczatek czesci wykonawczej
    begin
 	if (R = '1') then
 			S <=word_len +1 ;
-			U <= '0';
 			STOP_P <= 0;
 			PAR <= 0;
 			status <= czekaj;
-			ERROR <= '0';
+			blad := '0';
 			DONE <= '0';
 			timer <= 0;
 	elsif (C'event and C='1') then 
@@ -60,7 +60,7 @@ begin						-- poczatek czesci wykonawczej
 			if ( PAR /= par_len) then
 				PAR <= PAR+1;
 				if (wejscie(1) = XOR_REDUCE(bufor)) then
-					ERROR <= '1';
+					blad := '1';
 				end if;
 			else		
 				status <= stop;
@@ -69,7 +69,7 @@ begin						-- poczatek czesci wykonawczej
 			if ( STOP_P /= stop_len) then
 				STOP_P <= STOP_P + 1;
 			else 
-				if(ERROR /= '1') then
+				if(blad /= '1') then
 					DONE <= '1';
 				end if;
 				status <= czekaj;
@@ -83,6 +83,7 @@ begin						-- poczatek czesci wykonawczej
 		end if;
 		end if;
 	end if;
+	ERROR <= blad;
    end process ;
 
 end cialo;					-- zakonczenie ciala architektonicznego
