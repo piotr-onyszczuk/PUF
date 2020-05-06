@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <report-views version="2.0" >
  <header>
-  <DateModified>2020-05-06T17:59:18</DateModified>
+  <DateModified>2020-05-06T18:07:34</DateModified>
   <ModuleName>RECEIVER</ModuleName>
   <SummaryTimeStamp>Unknown</SummaryTimeStamp>
   <SavedFilePath>/home/ise/Desktop/PUF/Initial_project/iseconfig/RECEIVER.xreport</SavedFilePath>
-  <ImplementationReportsDirectory>/home/ise/Desktop/PUF/Initial_project</ImplementationReportsDirectory>
+  <ImplementationReportsDirectory>/home/ise/Desktop/PUF/Initial_project/</ImplementationReportsDirectory>
   <DateInitialized>2020-05-06T17:59:18</DateInitialized>
   <EnableMessageFiltering>false</EnableMessageFiltering>
  </header>
