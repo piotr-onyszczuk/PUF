@@ -43,30 +43,26 @@ begin
   end process;							-- zakonczenie procesu
   
   process is							-- proces bezwarunkowy
-    function neg(V :std_logic; N :boolean) return std_logic is	-- deklaracja funkcji wewnetrznej 'neg'
-    begin							-- czesc wykonawcza funkcji wewnetrznej
-      if (N=FALSE) then return (V); end if;			-- zwrot wartosc 'V' gdy 'N'=FALSE
-      return (not(V));						-- zwrot zanegowanej wartosci 'V'
-    end function;						-- zakonczenie funkcji wewnetrznej
+
   begin								-- czesc wykonawcza procesu
 	VAL<='0';
-    RX <= neg('0',N_RX);					-- incjalizacja sygnalu 'RX' na wartosci spoczynkowa
+    RX <= '0';					-- incjalizacja sygnalu 'RX' na wartosci spoczynkowa
 	 SLOWO <= "11111111";
     D  <= (others => '0');					-- wyzerowanie sygnalu 'D'
     wait for 200 ns;						-- odczekanie 200 ns
     loop							-- rozpoczecie petli nieskonczonej
-      VAL <= neg('1',N_RX);					-- ustawienie 'RX' na wartosc bitu START
+      VAL <= '1';					-- ustawienie 'RX' na wartosc bitu START
       wait for O_BITU;						-- odczekanie jednego bodu
       for i in 0 to word_len-1 loop				-- petla po kolejnych bitach slowa danych 'D'
-        RX <= neg(neg(SLOWO(i),N_SLOWO),N_RX);			-- ustawienie 'RX' na wartosc bitu 'D(i)'
+        RX <= SLOWO(i);			-- ustawienie 'RX' na wartosc bitu 'D(i)'
         wait for O_BITU;					-- odczekanie jednego bodu
       end loop;							-- zakonczenie petli
       if (par_len = 1) then				-- badanie aktywowania bitu parzystosci
-        RX<= neg(neg(XOR_REDUCE(SLOWO),N_SLOWO),N_RX);		-- ustawienie 'RX' na wartosc bitu parzystosci	
+        RX<= XOR_REDUCE(SLOWO);		-- ustawienie 'RX' na wartosc bitu parzystosci	
         wait for O_BITU;					-- odczekanie jednego bodu
       end if;							-- zakonczenie instukcji warunkowej
       for i in 0 to stop_len-1 loop				-- petla po liczbie bitow STOP
-        RX <= neg('0',N_RX);					-- ustawienie 'RX' na wartosc bitu STOP
+        RX <= '0';					-- ustawienie 'RX' na wartosc bitu STOP
         wait for O_BITU;					-- odczekanie jednego bodu
       end loop;							-- zakonczenie petli
       SLOWO <= SLOWO + 7;						-- zwiekszenia wartosci 'D' o 7

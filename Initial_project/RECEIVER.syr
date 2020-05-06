@@ -117,6 +117,8 @@ Parsing architecture <cialo> of entity <receiver>.
 =========================================================================
 
 Elaborating entity <RECEIVER> (architecture <cialo>) with generics from library <work>.
+WARNING:HDLCompiler:92 - "/home/ise/Desktop/PUF/Initial_project/receiver.vhd" Line 41: rx should be on the sensitivity list of the process
+WARNING:HDLCompiler:92 - "/home/ise/Desktop/PUF/Initial_project/receiver.vhd" Line 107: bufor should be on the sensitivity list of the process
 
 =========================================================================
 *                           HDL Synthesis                               *
@@ -125,7 +127,7 @@ Elaborating entity <RECEIVER> (architecture <cialo>) with generics from library 
 Synthesizing Unit <RECEIVER>.
     Related source file is "/home/ise/Desktop/PUF/Initial_project/receiver.vhd".
         word_len = 8
-        clock_speed = 500000000
+        clock_speed = 20000000
         bod = 9600
         par_len = 1
         stop_len = 2
@@ -134,14 +136,15 @@ Synthesizing Unit <RECEIVER>.
     Found 1-bit register for signal <DONE>.
     Found 2-bit register for signal <STOP_P>.
     Found 2-bit register for signal <status>.
-    Found 4-bit register for signal <S>.
+    Found 12-bit register for signal <timer>.
     Found 8-bit register for signal <D>.
+    Found 4-bit register for signal <S>.
 INFO:Xst:1799 - State stop is never reached in FSM <status>.
     Found finite state machine <FSM_0> for signal <status>.
     -----------------------------------------------------------------------
     | States             | 4                                              |
-    | Transitions        | 5                                              |
-    | Inputs             | 3                                              |
+    | Transitions        | 7                                              |
+    | Inputs             | 4                                              |
     | Outputs            | 3                                              |
     | Clock              | C (rising_edge)                                |
     | Reset              | R (positive)                                   |
@@ -151,12 +154,13 @@ INFO:Xst:1799 - State stop is never reached in FSM <status>.
     | Encoding           | auto                                           |
     | Implementation     | LUT                                            |
     -----------------------------------------------------------------------
-    Found 4-bit adder for signal <S[3]_GND_5_o_add_3_OUT> created at line 51.
-    Found 2-bit adder for signal <STOP_P[1]_GND_5_o_add_18_OUT> created at line 75.
+    Found 4-bit adder for signal <S[3]_GND_5_o_add_5_OUT> created at line 60.
+    Found 2-bit adder for signal <STOP_P[1]_GND_5_o_add_22_OUT> created at line 86.
+    Found 12-bit adder for signal <timer[11]_GND_5_o_add_30_OUT> created at line 96.
     Summary:
-	inferred   2 Adder/Subtractor(s).
-	inferred  16 D-type flip-flop(s).
-	inferred  11 Multiplexer(s).
+	inferred   3 Adder/Subtractor(s).
+	inferred  28 D-type flip-flop(s).
+	inferred  14 Multiplexer(s).
 	inferred   1 Finite State Machine(s).
 Unit <RECEIVER> synthesized.
 
@@ -164,16 +168,19 @@ Unit <RECEIVER> synthesized.
 HDL Synthesis Report
 
 Macro Statistics
-# Adders/Subtractors                                   : 2
+# Adders/Subtractors                                   : 3
+ 12-bit adder                                          : 1
  2-bit adder                                           : 1
  4-bit adder                                           : 1
-# Registers                                            : 5
+# Registers                                            : 6
  1-bit register                                        : 2
+ 12-bit register                                       : 1
  2-bit register                                        : 1
  4-bit register                                        : 1
  8-bit register                                        : 1
-# Multiplexers                                         : 11
+# Multiplexers                                         : 14
  1-bit 2-to-1 multiplexer                              : 8
+ 12-bit 2-to-1 multiplexer                             : 3
  2-bit 2-to-1 multiplexer                              : 1
  4-bit 2-to-1 multiplexer                              : 1
  8-bit 2-to-1 multiplexer                              : 1
@@ -193,21 +200,24 @@ Loading device for application Rf_Device from file '7a100t.nph' in environment /
 Loading device for application Rf_Device from file '7a100t.nph' in environment /opt/Xilinx/14.7/ISE_DS/ISE/.
 
 Synthesizing (advanced) Unit <RECEIVER>.
-The following registers are absorbed into counter <STOP_P>: 1 register on signal <STOP_P>.
 The following registers are absorbed into counter <S>: 1 register on signal <S>.
+The following registers are absorbed into counter <STOP_P>: 1 register on signal <STOP_P>.
 Unit <RECEIVER> synthesized (advanced).
 
 =========================================================================
 Advanced HDL Synthesis Report
 
 Macro Statistics
+# Adders/Subtractors                                   : 1
+ 12-bit adder                                          : 1
 # Counters                                             : 2
  2-bit up counter                                      : 1
  4-bit up counter                                      : 1
-# Registers                                            : 10
- Flip-Flops                                            : 10
-# Multiplexers                                         : 9
+# Registers                                            : 22
+ Flip-Flops                                            : 22
+# Multiplexers                                         : 12
  1-bit 2-to-1 multiplexer                              : 8
+ 12-bit 2-to-1 multiplexer                             : 3
  8-bit 2-to-1 multiplexer                              : 1
 # FSMs                                                 : 1
 # Xors                                                 : 2
@@ -248,8 +258,8 @@ Final Macro Processing ...
 Final Register Report
 
 Macro Statistics
-# Registers                                            : 15
- Flip-Flops                                            : 15
+# Registers                                            : 27
+ Flip-Flops                                            : 27
 
 =========================================================================
 
@@ -272,18 +282,21 @@ Top Level Output File Name         : RECEIVER.ngc
 
 Primitive and Black Box Usage:
 ------------------------------
-# BELS                             : 33
+# BELS                             : 82
 #      GND                         : 1
-#      INV                         : 2
-#      LUT2                        : 2
-#      LUT3                        : 10
-#      LUT5                        : 5
-#      LUT6                        : 12
-#      MUXF7                       : 1
-# FlipFlops/Latches                : 15
-#      FDC                         : 3
-#      FDCE                        : 4
-#      FDE                         : 8
+#      INV                         : 1
+#      LUT1                        : 11
+#      LUT2                        : 3
+#      LUT3                        : 3
+#      LUT4                        : 8
+#      LUT5                        : 3
+#      LUT6                        : 28
+#      MUXCY                       : 11
+#      VCC                         : 1
+#      XORCY                       : 12
+# FlipFlops/Latches                : 27
+#      FDC                         : 15
+#      FDCE                        : 12
 # Clock Buffers                    : 1
 #      BUFGP                       : 1
 # IO Buffers                       : 13
@@ -297,16 +310,16 @@ Selected Device : xa7a100tcsg324-2i
 
 
 Slice Logic Utilization: 
- Number of Slice Registers:              15  out of  126800     0%  
- Number of Slice LUTs:                   31  out of  63400     0%  
-    Number used as Logic:                31  out of  63400     0%  
+ Number of Slice Registers:              27  out of  126800     0%  
+ Number of Slice LUTs:                   57  out of  63400     0%  
+    Number used as Logic:                57  out of  63400     0%  
 
 Slice Logic Distribution: 
- Number of LUT Flip Flop pairs used:     31
-   Number with an unused Flip Flop:      16  out of     31    51%  
-   Number with an unused LUT:             0  out of     31     0%  
-   Number of fully used LUT-FF pairs:    15  out of     31    48%  
-   Number of unique control sets:         4
+ Number of LUT Flip Flop pairs used:     57
+   Number with an unused Flip Flop:      30  out of     57    52%  
+   Number with an unused LUT:             0  out of     57     0%  
+   Number of fully used LUT-FF pairs:    27  out of     57    47%  
+   Number of unique control sets:         2
 
 IO Utilization: 
  Number of IOs:                          14
@@ -336,7 +349,7 @@ Clock Information:
 -----------------------------------+------------------------+-------+
 Clock Signal                       | Clock buffer(FF name)  | Load  |
 -----------------------------------+------------------------+-------+
-C                                  | BUFGP                  | 15    |
+C                                  | BUFGP                  | 27    |
 -----------------------------------+------------------------+-------+
 
 Asynchronous Control Signals Information:
@@ -347,8 +360,8 @@ Timing Summary:
 ---------------
 Speed Grade: -2
 
-   Minimum period: 2.087ns (Maximum Frequency: 479.053MHz)
-   Minimum input arrival time before clock: 1.882ns
+   Minimum period: 2.523ns (Maximum Frequency: 396.385MHz)
+   Minimum input arrival time before clock: 1.887ns
    Maximum output required time after clock: 0.717ns
    Maximum combinational path delay: No path found
 
@@ -358,48 +371,49 @@ All values displayed in nanoseconds (ns)
 
 =========================================================================
 Timing constraint: Default period analysis for Clock 'C'
-  Clock period: 2.087ns (frequency: 479.053MHz)
-  Total number of paths / destination ports: 149 / 27
+  Clock period: 2.523ns (frequency: 396.385MHz)
+  Total number of paths / destination ports: 604 / 39
 -------------------------------------------------------------------------
-Delay:               2.087ns (Levels of Logic = 3)
-  Source:            D_6 (FF)
-  Destination:       blad (FF)
+Delay:               2.523ns (Levels of Logic = 4)
+  Source:            S_2 (FF)
+  Destination:       bufor_0 (FF)
   Source Clock:      C rising
   Destination Clock: C rising
 
-  Data Path: D_6 to blad
+  Data Path: S_2 to bufor_0
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FDE:C->Q              4   0.361   0.633  D_6 (D_6)
-     LUT5:I1->O            1   0.097   0.355  _n0112_inv_SW0 (N2)
-     LUT6:I5->O            1   0.097   0.439  blad_dpot (blad_dpot)
-     LUT3:I1->O            1   0.097   0.000  blad_rstpot (blad_rstpot)
-     FDC:D                     0.008          blad
+     FDCE:C->Q            11   0.361   0.627  S_2 (S_2)
+     LUT3:I0->O            3   0.097   0.367  Mmux__n01861111 (Mmux__n0186111)
+     LUT5:I4->O           12   0.097   0.416  _n0199_inv1_rstpot (_n0199_inv1_rstpot)
+     LUT6:I5->O            1   0.097   0.355  bufor_0_dpot (bufor_0_dpot)
+     LUT3:I2->O            1   0.097   0.000  bufor_0_dpot1 (bufor_0_dpot1)
+     FDCE:D                    0.008          bufor_0
     ----------------------------------------
-    Total                      2.087ns (0.660ns logic, 1.427ns route)
-                                       (31.6% logic, 68.4% route)
+    Total                      2.523ns (0.757ns logic, 1.766ns route)
+                                       (30.0% logic, 70.0% route)
 
 =========================================================================
 Timing constraint: Default OFFSET IN BEFORE for Clock 'C'
-  Total number of paths / destination ports: 37 / 22
+  Total number of paths / destination ports: 61 / 53
 -------------------------------------------------------------------------
-Offset:              1.882ns (Levels of Logic = 4)
-  Source:            RX (PAD)
-  Destination:       blad (FF)
+Offset:              1.887ns (Levels of Logic = 4)
+  Source:            VAL (PAD)
+  Destination:       bufor_0 (FF)
   Destination Clock: C rising
 
-  Data Path: RX to blad
+  Data Path: VAL to bufor_0
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     IBUF:I->O             9   0.001   0.788  RX_IBUF (RX_IBUF)
-     LUT5:I0->O            1   0.097   0.355  _n0112_inv_SW0 (N2)
-     LUT6:I5->O            1   0.097   0.439  blad_dpot (blad_dpot)
-     LUT3:I1->O            1   0.097   0.000  blad_rstpot (blad_rstpot)
-     FDC:D                     0.008          blad
+     IBUF:I->O            14   0.001   0.815  VAL_IBUF (VAL_IBUF)
+     LUT5:I0->O           12   0.097   0.416  _n0199_inv1_rstpot (_n0199_inv1_rstpot)
+     LUT6:I5->O            1   0.097   0.355  bufor_0_dpot (bufor_0_dpot)
+     LUT3:I2->O            1   0.097   0.000  bufor_0_dpot1 (bufor_0_dpot1)
+     FDCE:D                    0.008          bufor_0
     ----------------------------------------
-    Total                      1.882ns (0.300ns logic, 1.582ns route)
+    Total                      1.887ns (0.300ns logic, 1.587ns route)
                                        (15.9% logic, 84.1% route)
 
 =========================================================================
@@ -407,15 +421,15 @@ Timing constraint: Default OFFSET OUT AFTER for Clock 'C'
   Total number of paths / destination ports: 9 / 9
 -------------------------------------------------------------------------
 Offset:              0.717ns (Levels of Logic = 1)
-  Source:            D_7 (FF)
+  Source:            bufor_7 (FF)
   Destination:       D<7> (PAD)
   Source Clock:      C rising
 
-  Data Path: D_7 to D<7>
+  Data Path: bufor_7 to D<7>
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FDE:C->Q              4   0.361   0.356  D_7 (D_7)
+     FDCE:C->Q             4   0.361   0.356  bufor_7 (bufor_7)
      OBUF:I->O                 0.000          D_7_OBUF (D<7>)
     ----------------------------------------
     Total                      0.717ns (0.361ns logic, 0.356ns route)
@@ -431,21 +445,21 @@ Clock to Setup on destination clock C
                | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
 Source Clock   |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
 ---------------+---------+---------+---------+---------+
-C              |    2.087|         |         |         |
+C              |    2.523|         |         |         |
 ---------------+---------+---------+---------+---------+
 
 =========================================================================
 
 
-Total REAL time to Xst completion: 96.00 secs
-Total CPU time to Xst completion: 94.29 secs
+Total REAL time to Xst completion: 92.00 secs
+Total CPU time to Xst completion: 91.43 secs
  
 --> 
 
 
-Total memory usage is 950668 kilobytes
+Total memory usage is 950888 kilobytes
 
 Number of errors   :    0 (   0 filtered)
-Number of warnings :    7 (   0 filtered)
+Number of warnings :    9 (   0 filtered)
 Number of infos    :    1 (   0 filtered)
 

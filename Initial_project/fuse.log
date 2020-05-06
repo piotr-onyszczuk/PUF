@@ -7,8 +7,8 @@ Parsing VHDL file "/home/ise/Desktop/PUF/Initial_project/receiver.vhd" into libr
 Parsing VHDL file "/home/ise/Desktop/PUF/Initial_project/receiver_behav.vhd" into library work
 Starting static elaboration
 Completed static elaboration
-Fuse Memory Usage: 97132 KB
-Fuse CPU Usage: 1480 ms
+Fuse Memory Usage: 97128 KB
+Fuse CPU Usage: 1450 ms
 Compiling package standard
 Compiling package std_logic_1164
 Compiling package std_logic_arith
@@ -21,6 +21,6 @@ Time Resolution for simulation is 1ps.
 Waiting for 1 sub-compilation(s) to finish...
 Compiled 9 VHDL Units
 Built simulation executable /home/ise/Desktop/PUF/Initial_project/RECEIVER_TB_isim_beh.exe
-Fuse Memory Usage: 671580 KB
-Fuse CPU Usage: 1700 ms
+Fuse Memory Usage: 671576 KB
+Fuse CPU Usage: 1670 ms
 GCC CPU Usage: 280 ms

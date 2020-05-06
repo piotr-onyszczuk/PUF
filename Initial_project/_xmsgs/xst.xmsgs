@@ -5,28 +5,34 @@
      behavior or data corruption.  It is strongly advised that
      users do not edit the contents of this file. -->
 <messages>
+<msg type="warning" file="HDLCompiler" num="92" delta="new" >"/home/ise/Desktop/PUF/Initial_project/receiver.vhd" Line 41: <arg fmt="%s" index="1">rx</arg> should be on the sensitivity list of the process
+</msg>
+
+<msg type="warning" file="HDLCompiler" num="92" delta="old" >"/home/ise/Desktop/PUF/Initial_project/receiver.vhd" Line 107: <arg fmt="%s" index="1">bufor</arg> should be on the sensitivity list of the process
+</msg>
+
 <msg type="info" file="Xst" num="1799" delta="old" >State <arg fmt="%s" index="1">stop</arg> is never reached in FSM &lt;<arg fmt="%s" index="2">status</arg>&gt;.
 </msg>
 
 <msg type="warning" file="Xst" num="0" delta="new" >The specified part-type was not generated at build time. XST is loading the full part-type and will therefore consume more CPU and memory.
 </msg>
 
-<msg type="warning" file="Xst" num="1710" delta="new" >FF/Latch &lt;<arg fmt="%s" index="1">DONE</arg>&gt; (without init value) has a constant value of <arg fmt="%d" index="2">0</arg> in block &lt;<arg fmt="%s" index="3">RECEIVER</arg>&gt;. This FF/Latch will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="1710" delta="old" >FF/Latch &lt;<arg fmt="%s" index="1">DONE</arg>&gt; (without init value) has a constant value of <arg fmt="%d" index="2">0</arg> in block &lt;<arg fmt="%s" index="3">RECEIVER</arg>&gt;. This FF/Latch will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="2677" delta="new" >Node &lt;<arg fmt="%s" index="1">STOP_P_0</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">RECEIVER</arg>&gt;.
+<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">STOP_P_0</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">RECEIVER</arg>&gt;.
 </msg>
 
-<msg type="warning" file="Xst" num="2677" delta="new" >Node &lt;<arg fmt="%s" index="1">STOP_P_1</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">RECEIVER</arg>&gt;.
+<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">STOP_P_1</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">RECEIVER</arg>&gt;.
 </msg>
 
-<msg type="warning" file="Xst" num="1710" delta="new" >FF/Latch &lt;<arg fmt="%s" index="1">DONE</arg>&gt; (without init value) has a constant value of <arg fmt="%d" index="2">0</arg> in block &lt;<arg fmt="%s" index="3">RECEIVER</arg>&gt;. This FF/Latch will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="1710" delta="old" >FF/Latch &lt;<arg fmt="%s" index="1">DONE</arg>&gt; (without init value) has a constant value of <arg fmt="%d" index="2">0</arg> in block &lt;<arg fmt="%s" index="3">RECEIVER</arg>&gt;. This FF/Latch will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="2677" delta="new" >Node &lt;<arg fmt="%s" index="1">STOP_P_0</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">RECEIVER</arg>&gt;.
+<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">STOP_P_0</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">RECEIVER</arg>&gt;.
 </msg>
 
-<msg type="warning" file="Xst" num="2677" delta="new" >Node &lt;<arg fmt="%s" index="1">STOP_P_1</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">RECEIVER</arg>&gt;.
+<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">STOP_P_1</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">RECEIVER</arg>&gt;.
 </msg>
 
 </messages>
