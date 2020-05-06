@@ -26,7 +26,6 @@ architecture cialo of RECEIVER is		-- deklaracja ciala 'cialo' architektury
 	type STATUSY is (czekaj, data, parzystosc, stop);
 	signal status : STATUSY;
 	signal S : natural range 0 to word_len;
-   signal PAR : natural range 0 to par_len;
 	signal STOP_P : natural range 0 to stop_len;
 	signal timer : natural range 0 to clock_speed/bod;
 	constant time_t : natural := clock_speed/bod;
@@ -37,30 +36,34 @@ begin						-- poczatek czesci wykonawczej
   process (C, R) is
    begin
 	if (R = '1') then
-			S <=word_len +1 ;
+			S <= 0;
 			STOP_P <= 0;
-			PAR <= 0;
 			status <= czekaj;
 			blad := '0';
 			DONE <= '0';
 			timer <= 0;
 	elsif (C'event and C='1') then 
-		if (timer /= time_t) then 
-			timer <= timer +1;
-		else
-		 timer <= 0;
 		if  (status = data) then
 			if ( S /= word_len ) then
 				D(S) <= RX;
 				S <= S+1;
+				if (timer /= time_t) then 
+					timer <= timer +1;
+				else
+					timer <= 0;
+				end if;
 			else
 				status <= parzystosc;
 			end if;
 		elsif (status = parzystosc) then
-			if ( PAR /= par_len) then
-				PAR <= PAR+1;
+			if ( 1 = par_len) then
 				if (RX = XOR_REDUCE(D)) then
 					blad := '1';
+				end if;
+				if (timer /= time_t) then 
+					timer <= timer +1;
+				else
+					timer <= 0;
 				end if;
 			else		
 				status <= stop;
@@ -68,6 +71,11 @@ begin						-- poczatek czesci wykonawczej
 		elsif (status = stop) then
 			if ( STOP_P /= stop_len) then
 				STOP_P <= STOP_P + 1;
+				if (timer /= time_t) then 
+					timer <= timer +1;
+				else
+					timer <= 0;
+				end if;
 			else 
 				if(blad /= '1') then
 					DONE <= '1';
@@ -78,9 +86,12 @@ begin						-- poczatek czesci wykonawczej
 			S <= 0;
 			D(S) <= (others => '0');
 			STOP_P <= 0;
-			PAR <= 0;
 			status <= data;
-		end if;
+			if (timer /= time_t) then 
+				timer <= timer +1;
+			else
+				timer <= 0;
+			end if;
 		end if;
 	end if;
 	ERROR <= blad;
