@@ -5,14 +5,14 @@ Parameter TMPDIR set to xst/projnav.tmp
 
 
 Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.09 secs
+Total CPU time to Xst completion: 0.08 secs
  
 --> 
 Parameter xsthdpdir set to xst
 
 
 Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.09 secs
+Total CPU time to Xst completion: 0.08 secs
  
 --> 
 Reading design: RECEIVER_TB.prj
@@ -111,16 +111,23 @@ Slice Utilization Ratio Delta      : 5
 Parsing VHDL file "/home/ise/Desktop/PUF/Initial_project/receiver.vhd" into library work
 Parsing entity <RECEIVER>.
 Parsing architecture <cialo> of entity <receiver>.
-ERROR:HDLCompiler:69 - "/home/ise/Desktop/PUF/Initial_project/receiver.vhd" Line 62: <wejscie> is not declared.
-ERROR:HDLCompiler:845 - "/home/ise/Desktop/PUF/Initial_project/receiver.vhd" Line 79: Type of aggregate cannot be determined without context ; 0 visible types match here
-ERROR:HDLCompiler:854 - "/home/ise/Desktop/PUF/Initial_project/receiver.vhd" Line 25: Unit <cialo> ignored due to previous errors.
-VHDL file /home/ise/Desktop/PUF/Initial_project/receiver.vhd ignored due to errors
+Parsing VHDL file "/home/ise/Desktop/PUF/Initial_project/receiver_behav.vhd" into library work
+Parsing entity <RECEIVER_TB>.
+Parsing architecture <behavioural> of entity <receiver_tb>.
+
+=========================================================================
+*                            HDL Elaboration                            *
+=========================================================================
+
+Elaborating entity <RECEIVER_TB> (architecture <behavioural>) with generics from library <work>.
+ERROR:HDLCompiler:890 - "/home/ise/Desktop/PUF/Initial_project/receiver_behav.vhd" Line 36: wait statement without UNTIL clause not supported for synthesis
+Netlist RECEIVER_TB(20000000,5000000,8,1,2,false,false)(behavioural) remains a blackbox, due to errors in its contents
 --> 
 
 
-Total memory usage is 442592 kilobytes
+Total memory usage is 442912 kilobytes
 
-Number of errors   :    3 (   0 filtered)
+Number of errors   :    1 (   0 filtered)
 Number of warnings :    0 (   0 filtered)
 Number of infos    :    0 (   0 filtered)
 

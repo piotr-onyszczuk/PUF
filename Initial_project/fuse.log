@@ -1,0 +1,26 @@
+Running: /opt/Xilinx/14.7/ISE_DS/ISE/bin/lin64/unwrapped/fuse -intstyle ise -incremental -lib secureip -o /home/ise/Desktop/PUF/Initial_project/RECEIVER_TB_isim_beh.exe -prj /home/ise/Desktop/PUF/Initial_project/RECEIVER_TB_beh.prj work.RECEIVER_TB 
+ISim P.20131013 (signature 0xfbc00daa)
+Number of CPUs detected in this system: 4
+Turning on mult-threading, number of parallel sub-compilation jobs: 8 
+Determining compilation order of HDL files
+Parsing VHDL file "/home/ise/Desktop/PUF/Initial_project/receiver.vhd" into library work
+Parsing VHDL file "/home/ise/Desktop/PUF/Initial_project/receiver_behav.vhd" into library work
+Starting static elaboration
+Completed static elaboration
+Fuse Memory Usage: 97132 KB
+Fuse CPU Usage: 1480 ms
+Compiling package standard
+Compiling package std_logic_1164
+Compiling package std_logic_arith
+Compiling package std_logic_unsigned
+Compiling package attributes
+Compiling package std_logic_misc
+Compiling architecture cialo of entity RECEIVER [\RECEIVER(8,20000000,5000000,1,2...]
+Compiling architecture behavioural of entity receiver_tb
+Time Resolution for simulation is 1ps.
+Waiting for 1 sub-compilation(s) to finish...
+Compiled 9 VHDL Units
+Built simulation executable /home/ise/Desktop/PUF/Initial_project/RECEIVER_TB_isim_beh.exe
+Fuse Memory Usage: 671580 KB
+Fuse CPU Usage: 1700 ms
+GCC CPU Usage: 280 ms

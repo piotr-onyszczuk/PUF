@@ -23,11 +23,11 @@ architecture behavioural of RECEIVER_TB is
   signal   R		:std_logic := '0';			-- symulowany sygnal resetujacacy
   signal   C		:std_logic := '1';			-- symulowany zegar taktujacy inicjowany na '1'
   signal   RX		:std_logic;				-- symulowane wejscie 'RX'
-  signal   SLOWO	:std_logic_vector(B_SLOWA-1 downto 0);	-- obserwowane wyjscie 'SLOWO'
+  signal   SLOWO	:std_logic_vector(word_len-1 downto 0);	-- obserwowane wyjscie 'SLOWO'
   signal   VAL	   :std_logic;				-- obserwowane wyjscie 'GOTOWE'
   signal   ERROR	:std_logic;				-- obserwowane wyjscie 'GOTOWE'
   signal   DONE	:std_logic;				-- obserwowane wyjscie 'BLAD'
-  signal   D		:std_logic_vector(SLOWO'range);		-- symulowana dana transmitowana
+  signal   D		:std_logic_vector(word_len-1 downto 0);		-- symulowana dana transmitowana
   
 begin
 
@@ -49,25 +49,27 @@ begin
       return (not(V));						-- zwrot zanegowanej wartosci 'V'
     end function;						-- zakonczenie funkcji wewnetrznej
   begin								-- czesc wykonawcza procesu
-    TX <= neg('0',N_RX);					-- incjalizacja sygnalu 'RX' na wartosci spoczynkowa
+	VAL<='0';
+    RX <= neg('0',N_RX);					-- incjalizacja sygnalu 'RX' na wartosci spoczynkowa
+	 SLOWO <= "11111111";
     D  <= (others => '0');					-- wyzerowanie sygnalu 'D'
     wait for 200 ns;						-- odczekanie 200 ns
     loop							-- rozpoczecie petli nieskonczonej
-      TX <= neg('1',N_RX);					-- ustawienie 'RX' na wartosc bitu START
+      VAL <= neg('1',N_RX);					-- ustawienie 'RX' na wartosc bitu START
       wait for O_BITU;						-- odczekanie jednego bodu
       for i in 0 to word_len-1 loop				-- petla po kolejnych bitach slowa danych 'D'
-        TX <= neg(neg(D(i),N_SLOWO),N_RX);			-- ustawienie 'RX' na wartosc bitu 'D(i)'
+        RX <= neg(neg(SLOWO(i),N_SLOWO),N_RX);			-- ustawienie 'RX' na wartosc bitu 'D(i)'
         wait for O_BITU;					-- odczekanie jednego bodu
       end loop;							-- zakonczenie petli
       if (par_len = 1) then				-- badanie aktywowania bitu parzystosci
-        TX<= neg(neg(XOR_REDUCE(D),N_SLOWO),N_RX);		-- ustawienie 'RX' na wartosc bitu parzystosci	
+        RX<= neg(neg(XOR_REDUCE(SLOWO),N_SLOWO),N_RX);		-- ustawienie 'RX' na wartosc bitu parzystosci	
         wait for O_BITU;					-- odczekanie jednego bodu
       end if;							-- zakonczenie instukcji warunkowej
       for i in 0 to stop_len-1 loop				-- petla po liczbie bitow STOP
-        TX <= neg('0',N_RX);					-- ustawienie 'RX' na wartosc bitu STOP
+        RX <= neg('0',N_RX);					-- ustawienie 'RX' na wartosc bitu STOP
         wait for O_BITU;					-- odczekanie jednego bodu
       end loop;							-- zakonczenie petli
-      D <= D + 7;						-- zwiekszenia wartosci 'D' o 7
+      SLOWO <= SLOWO + 7;						-- zwiekszenia wartosci 'D' o 7
       wait for 10*O_ZEGARA;					-- odczekanie 10-ciu okresow zegara
     end loop;							-- zakonczenie petli
   end process;							-- zakonczenie procesu
