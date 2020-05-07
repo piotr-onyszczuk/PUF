@@ -69,9 +69,11 @@
     <transform xil_pn:end_ts="1588862320" xil_pn:in_ck="-8103625405338508449" xil_pn:name="TRAN_copyAbstractToPostAbstractSimulation" xil_pn:start_ts="1588862320">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
-      <outfile xil_pn:name="package_types.vhd"/>
-      <outfile xil_pn:name="receiver.vhd"/>
-      <outfile xil_pn:name="receiver_behav.vhd"/>
+      <status xil_pn:value="OutOfDateForInputs"/>
+      <status xil_pn:value="OutOfDateForOutputs"/>
+      <status xil_pn:value="InputAdded"/>
+      <status xil_pn:value="InputRemoved"/>
+      <status xil_pn:value="OutputRemoved"/>
     </transform>
     <transform xil_pn:end_ts="1588862320" xil_pn:name="TRAN_xawsToSimhdl" xil_pn:prop_ck="-5510125051084410260" xil_pn:start_ts="1588862320">
       <status xil_pn:value="SuccessfullyRun"/>
@@ -88,30 +90,33 @@
     <transform xil_pn:end_ts="1588862320" xil_pn:in_ck="-8103625405338508449" xil_pn:name="TRAN_copyPostAbstractToPreSimulation" xil_pn:start_ts="1588862320">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
-      <outfile xil_pn:name="package_types.vhd"/>
-      <outfile xil_pn:name="receiver.vhd"/>
-      <outfile xil_pn:name="receiver_behav.vhd"/>
+      <status xil_pn:value="OutOfDateForInputs"/>
+      <status xil_pn:value="OutOfDateForPredecessor"/>
+      <status xil_pn:value="OutOfDateForOutputs"/>
+      <status xil_pn:value="InputRemoved"/>
+      <status xil_pn:value="OutputRemoved"/>
     </transform>
     <transform xil_pn:end_ts="1588862324" xil_pn:in_ck="-8103625405338508449" xil_pn:name="TRAN_ISimulateBehavioralModelRunFuse" xil_pn:prop_ck="3232575530506518621" xil_pn:start_ts="1588862320">
       <status xil_pn:value="SuccessfullyRun"/>
-      <status xil_pn:value="ReadyToRun"/>
+      <status xil_pn:value="NotReadyToRun"/>
+      <status xil_pn:value="OutOfDateForInputs"/>
+      <status xil_pn:value="OutOfDateForProperties"/>
+      <status xil_pn:value="OutOfDateForPredecessor"/>
       <status xil_pn:value="OutOfDateForOutputs"/>
+      <status xil_pn:value="InputRemoved"/>
       <status xil_pn:value="OutputChanged"/>
-      <outfile xil_pn:name="RECEIVER_TB_beh.prj"/>
-      <outfile xil_pn:name="RECEIVER_TB_isim_beh.exe"/>
-      <outfile xil_pn:name="fuse.log"/>
-      <outfile xil_pn:name="isim"/>
-      <outfile xil_pn:name="isim.log"/>
-      <outfile xil_pn:name="xilinxsim.ini"/>
+      <status xil_pn:value="OutputRemoved"/>
     </transform>
     <transform xil_pn:end_ts="1588862324" xil_pn:in_ck="23632542589197081" xil_pn:name="TRAN_ISimulateBehavioralModel" xil_pn:prop_ck="2834725568769484352" xil_pn:start_ts="1588862324">
       <status xil_pn:value="SuccessfullyRun"/>
-      <status xil_pn:value="ReadyToRun"/>
+      <status xil_pn:value="NotReadyToRun"/>
+      <status xil_pn:value="OutOfDateForInputs"/>
+      <status xil_pn:value="OutOfDateForProperties"/>
+      <status xil_pn:value="OutOfDateForPredecessor"/>
       <status xil_pn:value="OutOfDateForOutputs"/>
+      <status xil_pn:value="InputRemoved"/>
       <status xil_pn:value="OutputChanged"/>
-      <outfile xil_pn:name="RECEIVER_TB_isim_beh.wdb"/>
-      <outfile xil_pn:name="isim.cmd"/>
-      <outfile xil_pn:name="isim.log"/>
+      <status xil_pn:value="OutputRemoved"/>
     </transform>
     <transform xil_pn:end_ts="1588857716" xil_pn:name="TRAN_copyInitialToXSTAbstractSynthesis" xil_pn:start_ts="1588857716">
       <status xil_pn:value="SuccessfullyRun"/>
@@ -147,17 +152,11 @@
       <status xil_pn:value="ReadyToRun"/>
       <status xil_pn:value="OutOfDateForInputs"/>
       <status xil_pn:value="OutOfDateForOutputs"/>
+      <status xil_pn:value="InputAdded"/>
       <status xil_pn:value="InputChanged"/>
+      <status xil_pn:value="InputRemoved"/>
       <status xil_pn:value="OutputChanged"/>
       <status xil_pn:value="OutputRemoved"/>
-      <outfile xil_pn:name="RECEIVER.ngc"/>
-      <outfile xil_pn:name="RECEIVER.ngr"/>
-      <outfile xil_pn:name="RECEIVER.prj"/>
-      <outfile xil_pn:name="RECEIVER.syr"/>
-      <outfile xil_pn:name="RECEIVER.xst"/>
-      <outfile xil_pn:name="RECEIVER_TB.prj"/>
-      <outfile xil_pn:name="RECEIVER_xst.xrpt"/>
-      <outfile xil_pn:name="webtalk_pn.xml"/>
     </transform>
   </transforms>
 
