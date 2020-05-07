@@ -51,7 +51,15 @@ begin																						-- poczatek czesci wykonawczej
 			D <= (others =>'0');
 	elsif (C'event and C='1') then 												-- praca synchroniczna
 	
-		if  (STATUS = data) then													-- wczytywanie danych
+		if (STATUS = czekaj and INPUT = '1') then							-- czekanie na start
+			TIMER <= 1;
+			S <= 0;
+			BUFOR <= (others => '0');
+			STOP_P <= 0;
+			STATUS <= data;
+			DONE <= '0';
+	
+		elsif  (STATUS = data) then													-- wczytywanie danych
 				if (TIMER /= TIME_T) then 
 					TIMER <= TIMER +1;
 				else
@@ -94,13 +102,6 @@ begin																						-- poczatek czesci wykonawczej
 					STATUS <= czekaj;
 				end if;
 				
-		elsif (STATUS = czekaj and INPUT = '1') then							-- czekanie na start
-				TIMER <= 1;
-				S <= 0;
-				BUFOR <= (others => '0');
-				STOP_P <= 0;
-				STATUS <= data;
-				DONE <= '0';
 		else
 				TIMER <= 1;
 				S <= 0;
