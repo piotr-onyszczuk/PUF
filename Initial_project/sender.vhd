@@ -4,7 +4,7 @@ use     ieee.std_logic_arith.all;												-- dolaczenie calego pakietu 'STD_L
 use 	  ieee.std_logic_misc.all;													-- dolaczenie calego pakietu 'STD_LOGIC_MISC'
 use 	  work.package_types.all;													-- dolaczenie pakietu z typami 
 
-entity RECEIVER is																	-- deklaracja sprzegu RECEIVER
+entity SENDER is																		-- deklaracja sprzegu SENDER
   generic (			
 	 WORD_LEN  		: natural := 8 ;												-- dlugosc slowa wejsciowego
 	 CLOCK_SPEED	: natural := 20_000_000;									-- czestotliwosc zegara
@@ -13,28 +13,27 @@ entity RECEIVER is																	-- deklaracja sprzegu RECEIVER
 	 STOP_LEN 		: natural := 2													-- dlugosc 
   );
   port (
-    D					: out std_logic_vector (WORD_LEN - 1 downto 0);		-- wyjscie danych 'D'
+    D					: in std_logic_vector (WORD_LEN - 1 downto 0);		-- wejscie danych 'D'
 	 C    			: in  std_logic; 												-- clock
 	 R    			: in  std_logic; 												-- reset
-    RX				: in  std_logic;												-- wejscie danych 'RX'
-    INPUT			: in  std_logic;												-- wejscie nadaje
-	 ERROR 			: out std_logic; 												-- error
+    TX				: out  std_logic;												-- wyjscie danych 'TX'
+    START			: in  std_logic;												-- wejscie nadaje
 	 DONE 			: out std_logic; 												-- gotowe
-	 WRITING 		: out bit;														-- pisze
+	 TRANSMITTING	: out std_logic;												-- wyjscie nadaje
 	 TIMER_OUT		: out natural range 0 to CLOCK_SPEED/BOD;				-- wyjscie licznika zegara
-	 STATUS_OUT		: out STATUSY 													-- wyjscie statusu
+	 STATUS_OUT		: out STATUSY; 												-- wyjscie statusu
+	 BIT_NUMBER		: out natural range 0 to WORD_LEN						-- numer bitu
   );
-end RECEIVER;
+end SENDER;
 
-architecture cialo of RECEIVER is												-- deklaracja ciala 'cialo' architektury
+architecture cialo of SENDER is													-- deklaracja ciala 'cialo' architektury
 	
 	signal STATUS 	: STATUSY;														-- status progaramu
 	signal S			: natural range 0 to WORD_LEN;							-- licznik pozycji w slowie
 	signal STOP_P 	: natural range 0 to STOP_LEN;							-- licznik bitow stopu
 	signal TIMER 	: natural range 0 to CLOCK_SPEED/BOD;					-- licznik zegara
 	constant TIME_T: natural := CLOCK_SPEED/BOD;								-- limit zegara
-	signal BUFOR	:std_logic_vector(D'range);								-- bufor przetrzymujacy wynik
-	signal ERROR_B	: std_logic := '0';											-- informacja o bledzie (bufor)
+	signal BUFOR	:std_logic_vector(D'range);								-- bufor przetrzymujacy wejscie
 	
 begin																						-- poczatek czesci wykonawczej
   process (C, R) is
@@ -43,64 +42,59 @@ begin																						-- poczatek czesci wykonawczej
 			S 			<= 0;
 			STOP_P 	<= 0;
 			STATUS 	<= czekaj;
-			ERROR_B 	<= '0';
 			DONE 		<= '0';
 			TIMER 	<= 0;
-			WRITING 	<= '0';
 			BUFOR <=(others => '0');
-			D <= (others =>'0');
 	elsif (C'event and C='1') then 												-- praca synchroniczna
 	
-		if  (STATUS = data) then													-- wczytywanie danych
+		if (STATUS = czekaj and START = '1') then								-- czekanie na start
+				TIMER <= 1;
+				S <= 0;
+				BUFOR <= D;
+				STOP_P <= 0;
+				STATUS <= data;
+				DONE <= '0';
+				TRANSMITTING <= '0';
+	
+		elsif  (STATUS = data) then												-- nadawanie danych
+				TRANSMITTING <= '1';
+				TX<=BUFOR(S);
 				if (TIMER /= TIME_T) then 
 					TIMER <= TIMER +1;
 				else
 					TIMER <= 1;
 					if (S = WORD_LEN-1) then
-						WRITING <= '0';
 						STATUS <= parzystosc;
-					else
-						WRITING <= '1';
 					end if;
 					if ( S /= WORD_LEN ) then
-						BUFOR(S) <= RX;
 						S <= (S+1);
 					end if;			
 				end if;
 			
-		elsif (STATUS = parzystosc) then											-- sprawdzenie parzystosci
+		elsif (STATUS = parzystosc) then											-- nadanie parzystosci
+				TRANSMITTING <= '0';
+				TX <= XOR_REDUCE(BUFOR);
 				if (TIMER /= TIME_T) then 
 					TIMER <= TIMER +1;
 				else
 					timer <= 1;
-					if (RX /= XOR_REDUCE(BUFOR)) then
-						ERROR_B <= '1';
-					end if;
 					STATUS <= stop;
 				end if;
 
 		elsif (STATUS = stop) then													-- odczekanie bitow stopu
+				TX <= '0';
+				DONE <= '1';
 				if ( STOP_P /= STOP_LEN) then
 					if (TIMER /= TIME_T) then 
 						TIMER <= TIMER +1;
 					else
 						TIMER <= 1;
 						STOP_P <= STOP_P + 1;
-						if(ERROR_B /= '1') then
-							DONE <= '1';
-						end if;
 					end if;
 				else
 					STATUS <= czekaj;
 				end if;
 				
-		elsif (STATUS = czekaj and INPUT = '1') then							-- czekanie na start
-				TIMER <= 1;
-				S <= 0;
-				BUFOR <= (others => '0');
-				STOP_P <= 0;
-				STATUS <= data;
-				DONE <= '0';
 		else
 				TIMER <= 1;
 				S <= 0;
@@ -108,12 +102,12 @@ begin																						-- poczatek czesci wykonawczej
 				STOP_P <= 0;
 				STATUS <= czekaj;
 				DONE <= '0';
+				TRANSMITTING <= '1';
 		end if;
 	end if;																		
-	ERROR 		<= ERROR_B;																		-- przypisanie buforow do wyjscia
-	D 				<= BUFOR;
 	TIMER_OUT 	<= TIMER;
 	STATUS_OUT 	<= STATUS;
+	BIT_NUMBER	<= S;
    end process ;
 
 end cialo;																				-- zakonczenie ciala architektonicznego
