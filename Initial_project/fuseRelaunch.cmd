@@ -1,1 +1,0 @@
--intstyle "ise" -incremental -lib "secureip" -o "/home/ise/Desktop/PUF/Initial_project/RECEIVER_TB_isim_beh.exe" -prj "/home/ise/Desktop/PUF/Initial_project/RECEIVER_TB_beh.prj" "work.RECEIVER_TB" 
