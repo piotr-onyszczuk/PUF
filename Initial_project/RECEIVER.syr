@@ -5,14 +5,14 @@ Parameter TMPDIR set to xst/projnav.tmp
 
 
 Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.09 secs
+Total CPU time to Xst completion: 0.08 secs
  
 --> 
 Parameter xsthdpdir set to xst
 
 
 Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.10 secs
+Total CPU time to Xst completion: 0.08 secs
  
 --> 
 Reading design: RECEIVER.prj
@@ -120,8 +120,10 @@ Parsing architecture <cialo> of entity <receiver>.
 =========================================================================
 
 Elaborating entity <RECEIVER> (architecture <cialo>) with generics from library <work>.
-WARNING:HDLCompiler:92 - "/home/ise/Desktop/PUF/Initial_project/receiver.vhd" Line 108: bufor should be on the sensitivity list of the process
-WARNING:HDLCompiler:92 - "/home/ise/Desktop/PUF/Initial_project/receiver.vhd" Line 109: timer should be on the sensitivity list of the process
+WARNING:HDLCompiler:92 - "/home/ise/Desktop/PUF/Initial_project/receiver.vhd" Line 104: error_b should be on the sensitivity list of the process
+WARNING:HDLCompiler:92 - "/home/ise/Desktop/PUF/Initial_project/receiver.vhd" Line 105: bufor should be on the sensitivity list of the process
+WARNING:HDLCompiler:92 - "/home/ise/Desktop/PUF/Initial_project/receiver.vhd" Line 106: timer should be on the sensitivity list of the process
+WARNING:HDLCompiler:92 - "/home/ise/Desktop/PUF/Initial_project/receiver.vhd" Line 107: status should be on the sensitivity list of the process
 
 =========================================================================
 *                           HDL Synthesis                               *
@@ -129,28 +131,25 @@ WARNING:HDLCompiler:92 - "/home/ise/Desktop/PUF/Initial_project/receiver.vhd" Li
 
 Synthesizing Unit <RECEIVER>.
     Related source file is "/home/ise/Desktop/PUF/Initial_project/receiver.vhd".
-        word_len = 8
-        clock_speed = 20000000
-        bod = 5000000
-        par_len = 1
-        stop_len = 2
-        f_par = '0'
-WARNING:Xst:2935 - Signal 'status_out', unconnected in block 'RECEIVER', is tied to its initial value (00).
-    Found 1-bit register for signal <blad>.
+        WORD_LEN = 8
+        CLOCK_SPEED = 20000000
+        BOD = 5000000
+        PAR_LEN = 1
+        STOP_LEN = 2
+    Found 1-bit register for signal <ERROR_B>.
     Found 1-bit register for signal <DONE>.
-    Found 1-bit register for signal <pisze>.
+    Found 1-bit register for signal <WRITING>.
     Found 2-bit register for signal <STOP_P>.
-    Found 2-bit register for signal <status>.
+    Found 2-bit register for signal <STATUS_OUT>.
     Found 3-bit register for signal <TIMER_OUT>.
     Found 8-bit register for signal <D>.
     Found 4-bit register for signal <S>.
-INFO:Xst:1799 - State stop is never reached in FSM <status>.
-    Found finite state machine <FSM_0> for signal <status>.
+    Found finite state machine <FSM_0> for signal <STATUS>.
     -----------------------------------------------------------------------
     | States             | 4                                              |
-    | Transitions        | 6                                              |
+    | Transitions        | 9                                              |
     | Inputs             | 4                                              |
-    | Outputs            | 4                                              |
+    | Outputs            | 5                                              |
     | Clock              | C (rising_edge)                                |
     | Reset              | R (positive)                                   |
     | Reset type         | asynchronous                                   |
@@ -159,13 +158,14 @@ INFO:Xst:1799 - State stop is never reached in FSM <status>.
     | Encoding           | auto                                           |
     | Implementation     | LUT                                            |
     -----------------------------------------------------------------------
-    Found 4-bit adder for signal <S[3]_GND_6_o_add_5_OUT> created at line 63.
-    Found 3-bit adder for signal <timer[2]_GND_6_o_add_20_OUT> created at line 87.
-    Found 2-bit adder for signal <STOP_P[1]_GND_6_o_add_22_OUT> created at line 91.
+    Found 4-bit adder for signal <S[3]_GND_6_o_add_7_OUT> created at line 66.
+    Found 3-bit adder for signal <TIMER[2]_GND_6_o_add_23_OUT> created at line 84.
+    Found 2-bit adder for signal <STOP_P[1]_GND_6_o_add_24_OUT> created at line 87.
+    Found 3-bit 4-to-1 multiplexer for signal <TIMER[2]_GND_6_o_mux_34_OUT> created at line 53.
     Summary:
 	inferred   3 Adder/Subtractor(s).
 	inferred  20 D-type flip-flop(s).
-	inferred  14 Multiplexer(s).
+	inferred  15 Multiplexer(s).
 	inferred   1 Finite State Machine(s).
 Unit <RECEIVER> synthesized.
 
@@ -183,10 +183,11 @@ Macro Statistics
  3-bit register                                        : 1
  4-bit register                                        : 1
  8-bit register                                        : 1
-# Multiplexers                                         : 14
+# Multiplexers                                         : 15
  1-bit 2-to-1 multiplexer                              : 8
  2-bit 2-to-1 multiplexer                              : 1
  3-bit 2-to-1 multiplexer                              : 3
+ 3-bit 4-to-1 multiplexer                              : 1
  4-bit 2-to-1 multiplexer                              : 1
  8-bit 2-to-1 multiplexer                              : 1
 # FSMs                                                 : 1
@@ -220,9 +221,10 @@ Macro Statistics
  4-bit up counter                                      : 1
 # Registers                                            : 14
  Flip-Flops                                            : 14
-# Multiplexers                                         : 12
+# Multiplexers                                         : 13
  1-bit 2-to-1 multiplexer                              : 8
  3-bit 2-to-1 multiplexer                              : 3
+ 3-bit 4-to-1 multiplexer                              : 1
  8-bit 2-to-1 multiplexer                              : 1
 # FSMs                                                 : 1
 # Xors                                                 : 2
@@ -235,23 +237,17 @@ Macro Statistics
 *                         Low Level Synthesis                           *
 =========================================================================
 Analyzing FSM <MFsm> for best encoding.
-Optimizing FSM <FSM_0> on signal <status[1:2]> with gray encoding.
+Optimizing FSM <FSM_0> on signal <STATUS[1:2]> with gray encoding.
 ------------------------
  State      | Encoding
 ------------------------
  czekaj     | 00
  data       | 01
  parzystosc | 11
- stop       | unreached
+ stop       | 10
 ------------------------
 
 Optimizing unit <RECEIVER> ...
-WARNING:Xst:1710 - FF/Latch <DONE> (without init value) has a constant value of 0 in block <RECEIVER>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:2677 - Node <STOP_P_0> of sequential type is unconnected in block <RECEIVER>.
-WARNING:Xst:2677 - Node <STOP_P_1> of sequential type is unconnected in block <RECEIVER>.
-WARNING:Xst:1710 - FF/Latch <DONE> (without init value) has a constant value of 0 in block <RECEIVER>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:2677 - Node <STOP_P_0> of sequential type is unconnected in block <RECEIVER>.
-WARNING:Xst:2677 - Node <STOP_P_1> of sequential type is unconnected in block <RECEIVER>.
 
 Mapping all equations...
 Building and optimizing final netlist ...
@@ -263,8 +259,8 @@ Final Macro Processing ...
 Final Register Report
 
 Macro Statistics
-# Registers                                            : 19
- Flip-Flops                                            : 19
+# Registers                                            : 22
+ Flip-Flops                                            : 22
 
 =========================================================================
 
@@ -287,17 +283,17 @@ Top Level Output File Name         : RECEIVER.ngc
 
 Primitive and Black Box Usage:
 ------------------------------
-# BELS                             : 40
-#      GND                         : 1
-#      INV                         : 2
-#      LUT2                        : 1
-#      LUT3                        : 10
+# BELS                             : 51
+#      INV                         : 3
+#      LUT2                        : 3
+#      LUT3                        : 14
 #      LUT4                        : 1
-#      LUT5                        : 6
-#      LUT6                        : 19
-# FlipFlops/Latches                : 19
-#      FDC                         : 6
-#      FDCE                        : 13
+#      LUT5                        : 8
+#      LUT6                        : 20
+#      MUXF7                       : 2
+# FlipFlops/Latches                : 22
+#      FDC                         : 8
+#      FDCE                        : 14
 # Clock Buffers                    : 1
 #      BUFGP                       : 1
 # IO Buffers                       : 19
@@ -311,16 +307,16 @@ Selected Device : xa7a100tcsg324-2i
 
 
 Slice Logic Utilization: 
- Number of Slice Registers:              19  out of  126800     0%  
- Number of Slice LUTs:                   39  out of  63400     0%  
-    Number used as Logic:                39  out of  63400     0%  
+ Number of Slice Registers:              22  out of  126800     0%  
+ Number of Slice LUTs:                   49  out of  63400     0%  
+    Number used as Logic:                49  out of  63400     0%  
 
 Slice Logic Distribution: 
- Number of LUT Flip Flop pairs used:     39
-   Number with an unused Flip Flop:      20  out of     39    51%  
-   Number with an unused LUT:             0  out of     39     0%  
-   Number of fully used LUT-FF pairs:    19  out of     39    48%  
-   Number of unique control sets:         5
+ Number of LUT Flip Flop pairs used:     49
+   Number with an unused Flip Flop:      27  out of     49    55%  
+   Number with an unused LUT:             0  out of     49     0%  
+   Number of fully used LUT-FF pairs:    22  out of     49    44%  
+   Number of unique control sets:         4
 
 IO Utilization: 
  Number of IOs:                          20
@@ -350,7 +346,7 @@ Clock Information:
 -----------------------------------+------------------------+-------+
 Clock Signal                       | Clock buffer(FF name)  | Load  |
 -----------------------------------+------------------------+-------+
-C                                  | BUFGP                  | 19    |
+C                                  | BUFGP                  | 22    |
 -----------------------------------+------------------------+-------+
 
 Asynchronous Control Signals Information:
@@ -361,9 +357,9 @@ Timing Summary:
 ---------------
 Speed Grade: -2
 
-   Minimum period: 2.127ns (Maximum Frequency: 470.046MHz)
+   Minimum period: 2.098ns (Maximum Frequency: 476.713MHz)
    Minimum input arrival time before clock: 1.440ns
-   Maximum output required time after clock: 0.745ns
+   Maximum output required time after clock: 1.377ns
    Maximum combinational path delay: No path found
 
 Timing Details:
@@ -372,67 +368,68 @@ All values displayed in nanoseconds (ns)
 
 =========================================================================
 Timing constraint: Default period analysis for Clock 'C'
-  Clock period: 2.127ns (frequency: 470.046MHz)
-  Total number of paths / destination ports: 220 / 32
+  Clock period: 2.098ns (frequency: 476.713MHz)
+  Total number of paths / destination ports: 257 / 36
 -------------------------------------------------------------------------
-Delay:               2.127ns (Levels of Logic = 3)
-  Source:            timer_1 (FF)
-  Destination:       bufor_1 (FF)
+Delay:               2.098ns (Levels of Logic = 3)
+  Source:            S_3 (FF)
+  Destination:       BUFOR_0 (FF)
   Source Clock:      C rising
   Destination Clock: C rising
 
-  Data Path: timer_1 to bufor_1
+  Data Path: S_3 to BUFOR_0
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FDC:C->Q              9   0.361   0.616  timer_1 (timer_1)
-     LUT3:I0->O            5   0.097   0.462  _n0194_inv111 (status_FSM_FFd1-In1)
-     LUT5:I3->O            7   0.097   0.389  _n0194_inv1_rstpot (_n0194_inv1_rstpot)
-     LUT3:I2->O            1   0.097   0.000  bufor_1_dpot (bufor_1_dpot)
-     FDCE:D                    0.008          bufor_1
+     FDCE:C->Q             6   0.361   0.599  S_3 (S_3)
+     LUT3:I0->O            2   0.097   0.444  _n0208_inv_SW0 (N5)
+     LUT5:I3->O            8   0.097   0.394  _n0208_inv_rstpot1 (_n0208_inv_rstpot1)
+     LUT3:I2->O            1   0.097   0.000  BUFOR_0_dpot (BUFOR_0_dpot)
+     FDCE:D                    0.008          BUFOR_0
     ----------------------------------------
-    Total                      2.127ns (0.660ns logic, 1.467ns route)
-                                       (31.0% logic, 69.0% route)
+    Total                      2.098ns (0.660ns logic, 1.438ns route)
+                                       (31.5% logic, 68.5% route)
 
 =========================================================================
 Timing constraint: Default OFFSET IN BEFORE for Clock 'C'
-  Total number of paths / destination ports: 44 / 37
+  Total number of paths / destination ports: 50 / 42
 -------------------------------------------------------------------------
 Offset:              1.440ns (Levels of Logic = 3)
   Source:            RX (PAD)
-  Destination:       bufor_1 (FF)
+  Destination:       BUFOR_0 (FF)
   Destination Clock: C rising
 
-  Data Path: RX to bufor_1
+  Data Path: RX to BUFOR_0
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
      IBUF:I->O             9   0.001   0.798  RX_IBUF (RX_IBUF)
-     LUT6:I0->O            1   0.097   0.439  Mmux__n018321 (_n0183<1>)
-     LUT3:I1->O            1   0.097   0.000  bufor_1_dpot (bufor_1_dpot)
-     FDCE:D                    0.008          bufor_1
+     LUT6:I0->O            1   0.097   0.439  Mmux__n019721 (_n0197<1>)
+     LUT3:I1->O            1   0.097   0.000  BUFOR_1_dpot (BUFOR_1_dpot)
+     FDCE:D                    0.008          BUFOR_1
     ----------------------------------------
     Total                      1.440ns (0.203ns logic, 1.237ns route)
                                        (14.1% logic, 85.9% route)
 
 =========================================================================
 Timing constraint: Default OFFSET OUT AFTER for Clock 'C'
-  Total number of paths / destination ports: 13 / 13
+  Total number of paths / destination ports: 17 / 16
 -------------------------------------------------------------------------
-Offset:              0.745ns (Levels of Logic = 1)
-  Source:            timer_1 (FF)
-  Destination:       TIMER_OUT<1> (PAD)
+Offset:              1.377ns (Levels of Logic = 2)
+  Source:            STATUS_FSM_FFd2 (FF)
+  Destination:       STATUS_OUT<0> (PAD)
   Source Clock:      C rising
 
-  Data Path: timer_1 to TIMER_OUT<1>
+  Data Path: STATUS_FSM_FFd2 to STATUS_OUT<0>
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FDC:C->Q              9   0.361   0.384  timer_1 (timer_1)
-     OBUF:I->O                 0.000          TIMER_OUT_1_OBUF (TIMER_OUT<1>)
+     FDC:C->Q             18   0.361   0.534  STATUS_FSM_FFd2 (STATUS_FSM_FFd2)
+     LUT2:I0->O            9   0.097   0.384  STATUS_STATUS_OUT[0]1 (STATUS_OUT_0_OBUF)
+     OBUF:I->O                 0.000          STATUS_OUT_0_OBUF (STATUS_OUT<0>)
     ----------------------------------------
-    Total                      0.745ns (0.361ns logic, 0.384ns route)
-                                       (48.4% logic, 51.6% route)
+    Total                      1.377ns (0.458ns logic, 0.919ns route)
+                                       (33.3% logic, 66.7% route)
 
 =========================================================================
 
@@ -444,21 +441,21 @@ Clock to Setup on destination clock C
                | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
 Source Clock   |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
 ---------------+---------+---------+---------+---------+
-C              |    2.127|         |         |         |
+C              |    2.098|         |         |         |
 ---------------+---------+---------+---------+---------+
 
 =========================================================================
 
 
-Total REAL time to Xst completion: 103.00 secs
-Total CPU time to Xst completion: 101.43 secs
+Total REAL time to Xst completion: 96.00 secs
+Total CPU time to Xst completion: 94.13 secs
  
 --> 
 
 
-Total memory usage is 950836 kilobytes
+Total memory usage is 950752 kilobytes
 
 Number of errors   :    0 (   0 filtered)
-Number of warnings :   10 (   0 filtered)
-Number of infos    :    1 (   0 filtered)
+Number of warnings :    5 (   0 filtered)
+Number of infos    :    0 (   0 filtered)
 
