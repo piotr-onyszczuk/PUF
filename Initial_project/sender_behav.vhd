@@ -5,7 +5,7 @@ use		ieee.std_logic_unsigned.all;											-- dolaczenie calego pakietu 'STD_LO
 use		ieee.std_logic_misc.all;												-- dolaczenie calego pakietu 'STD_LOGIC_MISC'
 use		work.package_types.all;													-- dolaczenie pakietu z typami 
 
-entity RECEIVER_TB is
+entity SENDER_TB is
 	generic (
 		constant CLOCK_SPEED		: natural := 20_000_000;					-- czestotliwosc zegara systemowego w [Hz]
 		constant BOD				: natural := 2_000_000;						-- predkosc nadawania w [bodach]
@@ -13,26 +13,24 @@ entity RECEIVER_TB is
 		constant PAR_LEN			: natural := 1;								-- liczba bitow parzystosci (0-1)
 		constant STOP_LEN			: natural := 2									-- liczba bitow stopu (1-2)
 	);
-end RECEIVER_TB;
+end SENDER_TB;
 
-architecture behavioural of RECEIVER_TB is
+architecture behavioural of SENDER_TB is
 
 	constant O_ZEGARA				: time := 1 sec/CLOCK_SPEED;				-- okres zegara systemowego
 	constant O_BITU				: time := 1 sec/BOD;							-- okres czasu trwania jednego bodu
 
 	signal R							: std_logic := '0';							-- symulowany sygnal resetujacacy
 	signal C							: std_logic := '1';							-- symulowany zegar taktujacy inicjowany na '1'
-	signal RX						: std_logic;									-- symulowane wejscie 'RX'
-	signal SLOWO					: std_logic_vector(WORD_LEN-1 downto 0);-- symulowane slowo wejsciowe
+	signal TX						: std_logic;									-- obserwowane wyjscie 'TX'
 	signal START					: std_logic;									-- informacja o nadawaniu
-	signal ERROR					: std_logic;									-- obserwowane wyjscie 'ERROR'
 	signal DONE						: std_logic;									-- obserwowane wyjscie 'DONE'
-	signal D	:std_logic_vector(WORD_LEN-1 downto 0) := "00000000";		-- obserwowana dana wyjsciowa
-	signal WRITING					: bit;											-- obserwowane wyjscie 'WRITING'
-	signal TIMER_OUT				: natural range 0 to CLOCK_SPEED/BOD;	-- obserwowane wyjscie 'TIMER_OUT'
-	signal STATUS_OUT				: STATUSY;										-- obserwowane wyjscie 'STATUS_OUT'
-	signal TRANSMITTING_PARITY	: std_logic := '0';							-- sygnal pomocniczy (do debugowania) informujacy o nadawaniu bitu parzystosci
-
+	signal D	:std_logic_vector(WORD_LEN-1 downto 0) :="00000000";		-- symulowane slowo wejsciowe
+	signal TRANSMITTING  		: std_logic :='0';							-- obserwowane wyjscie 'TRANSMITTING'
+	signal TIMER_OUT 				: natural range 0 to CLOCK_SPEED/BOD;	-- obserwowane wyjscie 'TIMER_OUT'
+	signal STATUS_OUT 			: STATUSY;										-- obserwowane wyjscie 'STATUS_OUT'
+	signal PROCESSING				: bit;											-- sygnal pomocniczy (do debugowania) do obserwowania stanu symulacji
+	signal BIT_NUMBER				: natural range 0 to WORD_LEN;			-- obserwowane wyjscie z numerem bitu
 begin
 
 	process is																			-- proces bezwarunkowy
@@ -49,35 +47,31 @@ begin
 	process is																			-- proces bezwarunkowy
 	begin																					-- czesc wykonawcza procesu
 		START		<= '0';																-- incjalizacja sygnalu 'START' na wartosci spoczynkowa
-		RX 		<= '0';																-- incjalizacja sygnalu 'RX' na wartosci spoczynkowa
-		SLOWO 	<= "00111001";														-- inicjalizacja slowa wejsciowego
+		D			<= "00111001";														-- inicjalizacja slowa wejsciowego
 		wait for 200 ns;																-- odczekanie 200 ns
 		loop																				-- rozpoczecie petli nieskonczonej
-			START <= '1';																-- ustawienie 'START' na wartosc bitu START
+			START 		<= '1';														-- ustawienie 'START' na wartosc bitu START
+			PROCESSING 	<= '1';														-- ustawienie sygnalu pomocniczego na '1'
 			wait for O_BITU;															-- odczekanie jednego bodu
 			for i in 0 to WORD_LEN - 1 loop										-- petla po kolejnych bitach slowa danych 'D'
-				RX <= SLOWO(i);														-- ustawienie 'RX' na wartosc bitu 'D(i)'
 				wait for O_BITU;														-- odczekanie jednego bodu
 			end loop;																	-- zakonczenie petli
-			START					 	<= '0';											-- wylaczenie bitu nadawania danej
-			TRANSMITTING_PARITY 	<= '1';											-- wlaczenie bitu nadawania parzystosci
+			START <= '0';																-- wylaczenie bitu nadawania danej
 			if (par_len = 1) then													-- badanie aktywowania bitu parzystosci
-				RX<= XOR_REDUCE(SLOWO);												-- ustawienie 'RX' na wartosc bitu parzystosci	
 				wait for O_BITU;														-- odczekanie jednego bodu
 			end if;																		-- zakonczenie instukcji warunkowej
-			TRANSMITTING_PARITY <='0';												-- wylaczenie bitu nadawania parzystosci
 			for i in 0 to STOP_LEN - 1 loop										-- petla po liczbie bitow STOP
-				RX <= '0';																-- ustawienie 'RX' na wartosc bitu STOP
 				wait for O_BITU;														-- odczekanie jednego bodu
 			end loop;																	-- zakonczenie petli
-			SLOWO <= SLOWO + 7;														-- zwiekszenia SLOWA o 7
+			PROCESSING <= '0';														-- ustawienie sygnalu pomocniczego na '0'
+			D <= D + 7;																	-- zwiekszenie D o 7
 			wait for 10 * O_ZEGARA;													-- odczekanie 10-ciu okresow zegara
 		end loop;																		-- zakonczenie petli
 	end process;																		-- zakonczenie procesu
 
-	RECEIVER_INST: entity work.RECEIVER											-- instancja odbiornika szeregowego 'RECEIVER'
+	SENDER_INST: entity work.SENDER												-- instancja odbiornika szeregowego 'SENDER'
 		generic map(																	-- mapowanie parametrow biezacych
-			CLOCK_SPEED				=> CLOCK_SPEED,								-- czestotliwosc zegata w [Hz]
+			CLOCK_SPEED				=> CLOCK_SPEED,								-- czestotliwosc zegara w [Hz]
 			BOD						=> BOD,											-- predkosc odbierania w [bodach]
 			WORD_LEN					=> WORD_LEN,									-- liczba bitow slowa danych (5-8)
 			PAR_LEN					=> PAR_LEN,										-- liczba bitow parzystosci (0-1)
@@ -87,13 +81,12 @@ begin
 			R							=> R,												-- sygnal resetowania
 			C							=> C,												-- zegar taktujacy
 			D							=> D,												-- slowo danych
-			RX							=> RX,											-- odebrany sygnal szeregowy
+			TX							=> TX,											-- odebrany sygnal szeregowy
 			START						=> START,										-- informacja o rozpoczeciu nadawania
-			ERROR						=> ERROR,										-- flaga wykrycia bledu w odbiorze
-			DONE						=> DONE,											-- flaga zakonczenia odbioru
-			WRITING					=> WRITING,										-- flaga pisania
-			TIMER_OUT				=> TIMER_OUT,									-- obserwowany licznik zegara
-			STATUS_OUT				=> STATUS_OUT									-- obserwowany status
+			DONE						=> DONE,											-- flaga zakonczenia nadawania danej
+			TRANSMITTING			=> TRANSMITTING,								-- informacja o nadawaniu
+			TIMER_OUT 				=> TIMER_OUT,									-- obserwowany licznik zegara
+			STATUS_OUT 				=> STATUS_OUT,									-- obserwowany status
+			BIT_NUMBER				=> BIT_NUMBER									-- obserwowany numer bitu
 		);
-
 end behavioural;
