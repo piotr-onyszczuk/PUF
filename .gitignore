@@ -41,7 +41,7 @@ Thumbs.db
 .DS_Store
 
 #ignore everything
-*
+#*
 
 #except for vhdl file and ucf, md and other necessary stuff
 !.gitignore
