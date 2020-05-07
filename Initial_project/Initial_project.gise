@@ -70,6 +70,10 @@
     <transform xil_pn:end_ts="1588869620" xil_pn:in_ck="1486037455775923974" xil_pn:name="TRAN_copyAbstractToPostAbstractSimulation" xil_pn:start_ts="1588869620">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
+      <status xil_pn:value="OutOfDateForInputs"/>
+      <status xil_pn:value="OutOfDateForOutputs"/>
+      <status xil_pn:value="InputChanged"/>
+      <status xil_pn:value="OutputChanged"/>
       <outfile xil_pn:name="package_types.vhd"/>
       <outfile xil_pn:name="receiver.vhd"/>
       <outfile xil_pn:name="receiver_behav.vhd"/>
@@ -91,6 +95,11 @@
     <transform xil_pn:end_ts="1588869620" xil_pn:in_ck="1486037455775923974" xil_pn:name="TRAN_copyPostAbstractToPreSimulation" xil_pn:start_ts="1588869620">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
+      <status xil_pn:value="OutOfDateForInputs"/>
+      <status xil_pn:value="OutOfDateForPredecessor"/>
+      <status xil_pn:value="OutOfDateForOutputs"/>
+      <status xil_pn:value="InputChanged"/>
+      <status xil_pn:value="OutputChanged"/>
       <outfile xil_pn:name="package_types.vhd"/>
       <outfile xil_pn:name="receiver.vhd"/>
       <outfile xil_pn:name="receiver_behav.vhd"/>
@@ -100,8 +109,11 @@
     <transform xil_pn:end_ts="1588869622" xil_pn:in_ck="1486037455775923974" xil_pn:name="TRAN_ISimulateBehavioralModelRunFuse" xil_pn:prop_ck="3232575530506518621" xil_pn:start_ts="1588869620">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
+      <status xil_pn:value="OutOfDateForInputs"/>
       <status xil_pn:value="OutOfDateForProperties"/>
+      <status xil_pn:value="OutOfDateForPredecessor"/>
       <status xil_pn:value="OutOfDateForOutputs"/>
+      <status xil_pn:value="InputChanged"/>
       <status xil_pn:value="OutputChanged"/>
       <outfile xil_pn:name="RECEIVER_TB_beh.prj"/>
       <outfile xil_pn:name="RECEIVER_TB_isim_beh.exe"/>

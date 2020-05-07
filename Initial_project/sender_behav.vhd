@@ -43,7 +43,7 @@ begin
 	begin																					-- czesc wykonawcza procesu
 		C <= not(C); wait for O_ZEGARA/2;										-- zanegowanie sygnalu 'clk' i odczekanie pol okresu zegara
 	end process;																		-- zakonczenie procesu
-  
+
 	process is																			-- proces bezwarunkowy
 	begin																					-- czesc wykonawcza procesu
 		START		<= '0';																-- incjalizacja sygnalu 'START' na wartosci spoczynkowa
@@ -68,7 +68,7 @@ begin
 			wait for 10 * O_ZEGARA;													-- odczekanie 10-ciu okresow zegara
 		end loop;																		-- zakonczenie petli
 	end process;																		-- zakonczenie procesu
-  
+
 	SENDER_INST: entity work.SENDER												-- instancja odbiornika szeregowego 'SENDER'
 		generic map(																	-- mapowanie parametrow biezacych
 			CLOCK_SPEED				=> CLOCK_SPEED,								-- czestotliwosc zegara w [Hz]

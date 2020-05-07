@@ -32,7 +32,7 @@ architecture behavioural of RECEIVER_TB is
 	signal TIMER_OUT				: natural range 0 to CLOCK_SPEED/BOD;	-- obserwowane wyjscie 'TIMER_OUT'
 	signal STATUS_OUT				: STATUSY;										-- obserwowane wyjscie 'STATUS_OUT'
 	signal TRANSMITTING_PARITY	: std_logic := '0';							-- sygnal pomocniczy (do debugowania) informujacy o nadawaniu bitu parzystosci
-  
+
 begin
 
 	process is																			-- proces bezwarunkowy
@@ -45,7 +45,7 @@ begin
 	begin																					-- czesc wykonawcza procesu
 		C <= not(C); wait for O_ZEGARA/2;										-- zanegowanie sygnalu 'clk' i odczekanie pol okresu zegara
 	end process;																		-- zakonczenie procesu
-  
+
 	process is																			-- proces bezwarunkowy
 	begin																					-- czesc wykonawcza procesu
 		START		<= '0';																-- incjalizacja sygnalu 'START' na wartosci spoczynkowa
@@ -74,7 +74,7 @@ begin
 			wait for 10 * O_ZEGARA;													-- odczekanie 10-ciu okresow zegara
 		end loop;																		-- zakonczenie petli
 	end process;																		-- zakonczenie procesu
-  
+
 	RECEIVER_INST: entity work.RECEIVER											-- instancja odbiornika szeregowego 'RECEIVER'
 		generic map(																	-- mapowanie parametrow biezacych
 			CLOCK_SPEED				=> CLOCK_SPEED,								-- czestotliwosc zegata w [Hz]
