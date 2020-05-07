@@ -101,6 +101,13 @@ begin																						-- poczatek czesci wykonawczej
 				STOP_P <= 0;
 				STATUS <= data;
 				DONE <= '0';
+		else
+				TIMER <= 1;
+				S <= 0;
+				BUFOR <= (others => '0');
+				STOP_P <= 0;
+				STATUS <= czekaj;
+				DONE <= '0';
 		end if;
 	end if;																		
 	ERROR 		<= ERROR_B;																		-- przypisanie buforow do wyjscia
