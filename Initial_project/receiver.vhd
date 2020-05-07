@@ -17,7 +17,7 @@ entity RECEIVER is																	-- deklaracja sprzegu RECEIVER
 	 C    			: in  std_logic; 												-- clock
 	 R    			: in  std_logic; 												-- reset
     RX				: in  std_logic;												-- wejscie danych 'RX'
-    INPUT			: in  std_logic;												-- wejscie nadaje
+    START			: in  std_logic;												-- wejscie nadaje
 	 ERROR 			: out std_logic; 												-- error
 	 DONE 			: out std_logic; 												-- gotowe
 	 WRITING 		: out bit;														-- pisze
@@ -51,7 +51,7 @@ begin																						-- poczatek czesci wykonawczej
 			D <= (others =>'0');
 	elsif (C'event and C='1') then 												-- praca synchroniczna
 	
-		if (STATUS = czekaj and INPUT = '1') then							-- czekanie na start
+		if (STATUS = czekaj and START = '1') then								-- czekanie na start
 			TIMER <= 1;
 			S <= 0;
 			BUFOR <= (others => '0');
@@ -59,7 +59,7 @@ begin																						-- poczatek czesci wykonawczej
 			STATUS <= data;
 			DONE <= '0';
 	
-		elsif  (STATUS = data) then													-- wczytywanie danych
+		elsif  (STATUS = data) then												-- wczytywanie danych
 				if (TIMER /= TIME_T) then 
 					TIMER <= TIMER +1;
 				else
@@ -110,8 +110,9 @@ begin																						-- poczatek czesci wykonawczej
 				STATUS <= czekaj;
 				DONE <= '0';
 		end if;
+		
 	end if;																		
-	ERROR 		<= ERROR_B;																		-- przypisanie buforow do wyjscia
+	ERROR 		<= ERROR_B;															-- przypisanie buforow do wyjscia
 	D 				<= BUFOR;
 	TIMER_OUT 	<= TIMER;
 	STATUS_OUT 	<= STATUS;

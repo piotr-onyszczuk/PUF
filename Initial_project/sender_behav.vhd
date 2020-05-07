@@ -29,7 +29,7 @@ architecture behavioural of SENDER_TB is
 	signal TRANSMITTING  		: std_logic :='0';							-- obserwowane wyjscie 'TRANSMITTING'
 	signal TIMER_OUT 				: natural range 0 to CLOCK_SPEED/BOD;	-- obserwowane wyjscie 'TIMER_OUT'
 	signal STATUS_OUT 			: STATUSY;										-- obserwowane wyjscie 'STATUS_OUT'
-	signal PROCESSING				: bit;											-- sygnal pomocniczy do obserwowania stanu symulacji
+	signal PROCESSING				: bit;											-- sygnal pomocniczy (do debugowania) do obserwowania stanu symulacji
 	signal BIT_NUMBER				: natural range 0 to WORD_LEN;			-- obserwowane wyjscie z numerem bitu
 begin
 
