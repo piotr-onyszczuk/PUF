@@ -81,7 +81,7 @@ begin
 			R							=> R,												-- sygnal resetowania
 			C							=> C,												-- zegar taktujacy
 			D							=> D,												-- slowo danych
-			TX							=> TX,											-- odebrany sygnal szeregowy
+			TX							=> TX,											-- nadawany sygnal szeregowy
 			START						=> START,										-- informacja o rozpoczeciu nadawania
 			DONE						=> DONE,											-- flaga zakonczenia nadawania danej
 			TRANSMITTING			=> TRANSMITTING,								-- informacja o nadawaniu
