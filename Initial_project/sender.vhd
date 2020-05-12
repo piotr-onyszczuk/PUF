@@ -102,7 +102,7 @@ begin																						-- poczatek czesci wykonawczej
 				STOP_P			<= 0;
 				STATUS			<= czekaj;
 				DONE				<= '0';
-				TRANSMITTING	<= '1';
+				TRANSMITTING	<= '0';
 			end if;
 
 		end if;

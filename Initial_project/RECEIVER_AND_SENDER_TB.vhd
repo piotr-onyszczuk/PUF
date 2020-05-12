@@ -72,7 +72,7 @@ begin
 			end loop;																	-- zakonczenie petli
 			PROCESSING <= '0';														-- ustawienie sygnalu pomocniczego na '0'
 			D_IN <= D_IN + 7;															-- zwiekszenie D o 7
-			wait for 10 * O_ZEGARA;													-- odczekanie 10-ciu okresow zegara
+			wait for 20 * O_ZEGARA;													-- odczekanie 20-stu okresow zegara
 		end loop;																		-- zakonczenie petli
 	end process;																		-- zakonczenie procesu
 

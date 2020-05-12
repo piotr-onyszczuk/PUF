@@ -58,10 +58,14 @@ begin																						-- poczatek czesci wykonawczej
 				STOP_P	<= 0;
 				STATUS	<= data;
 				DONE		<= '0';
+				ERROR_B	<= '0';
 
 			elsif (STATUS = data) then												-- wczytywanie danych
 				if (TIMER /= TIME_T) then 
 					TIMER <= TIMER +1;
+					if (TIMER = 1 and S /= WORD_LEN) then
+						BUFOR(S) <= RX;
+					end if;
 				else
 					TIMER <= 1;
 					if (S = WORD_LEN-1) then
@@ -71,7 +75,6 @@ begin																						-- poczatek czesci wykonawczej
 						WRITING <= '1';
 					end if;
 					if (S /= WORD_LEN) then
-						BUFOR(S) <= RX;
 						S <= (S + 1);
 					end if;
 				end if;
@@ -79,11 +82,11 @@ begin																						-- poczatek czesci wykonawczej
 			elsif (STATUS = parzystosc) then										-- sprawdzenie parzystosci
 				if (TIMER /= TIME_T) then 
 					TIMER <= TIMER + 1;
-				else
-					timer <= 1;
-					if (RX /= XOR_REDUCE(BUFOR)) then
+					if (TIMER = 1 and RX /= XOR_REDUCE(BUFOR)) then
 						ERROR_B <= '1';
 					end if;
+				else
+					timer <= 1;
 					STATUS <= stop;
 				end if;
 
@@ -91,6 +94,9 @@ begin																						-- poczatek czesci wykonawczej
 				if (STOP_P /= STOP_LEN) then
 					if (TIMER /= TIME_T) then 
 						TIMER <= TIMER + 1;
+						if (TIMER = 1 and RX /= '0') then
+							ERROR_B <= '1';
+						end if;
 					else
 						TIMER <= 1;
 						STOP_P <= STOP_P + 1;
@@ -109,6 +115,7 @@ begin																						-- poczatek czesci wykonawczej
 					STOP_P	<= 0;
 					STATUS	<= czekaj;
 					DONE		<= '0';
+					ERROR_B	<= '0';
 			end if;
 
 		end if;

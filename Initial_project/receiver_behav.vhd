@@ -54,7 +54,6 @@ begin
 		wait for 200 ns;																-- odczekanie 200 ns
 		loop																				-- rozpoczecie petli nieskonczonej
 			START <= '1';																-- ustawienie 'START' na wartosc bitu START
-			wait for O_BITU;															-- odczekanie jednego bodu
 			for i in 0 to WORD_LEN - 1 loop										-- petla po kolejnych bitach slowa danych 'D'
 				RX <= SLOWO(i);														-- ustawienie 'RX' na wartosc bitu 'D(i)'
 				wait for O_BITU;														-- odczekanie jednego bodu
