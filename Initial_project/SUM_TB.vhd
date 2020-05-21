@@ -12,7 +12,8 @@ entity SUM_TB is
 		constant WORD_LEN			: natural := 8;								-- liczba bitow slowa danych (5-8)
 		constant PAR_LEN			: natural := 1;								-- liczba bitow parzystosci (0-1)
 		constant STOP_LEN			: natural := 2;								-- liczba bitow stopu (1-2)
-		constant MAX_NUM_LEN		: natural := 5
+		constant MAX_NUM_LEN		: natural := 5;
+		constant MAX_ARGS			: natural := 5
 	);
 end SUM_TB;
 
@@ -20,7 +21,7 @@ architecture behavioural of SUM_TB is
 
 	constant O_ZEGARA				: time := 1 sec/CLOCK_SPEED;				-- okres zegara systemowego
 	constant O_BITU				: time := 1 sec/BOD;							-- okres czasu trwania jednego bodu
-	constant zadanie 				: string := "521+41=";
+	constant zadanie 				: string := "(+521)+(-41)+(12)-36=";
 	signal R							: std_logic := '0';							-- symulowany sygnal resetujacacy
 	signal C							: std_logic := '1';							-- symulowany zegar taktujacy inicjowany na '1'
 	signal RX_TX					: std_logic;									-- obserwowane wyjscie 'TX'
@@ -41,11 +42,10 @@ architecture behavioural of SUM_TB is
 	signal CALC_IN					: natural;
 	signal DONE_CALC				: std_logic;
 	signal RESULT					: natural;
-	signal CURR_NATURAL			: natural;
 	signal STATUS_OUT_CALC		: STATUSES;
-	signal OPERAND_OUT			: OPERANDS;
-	signal BUFOR1_OUT				: LICZBA (MAX_NUM_LEN downto 0);	
-	signal BUFOR2_OUT				: LICZBA (MAX_NUM_LEN downto 0);
+	signal ARGS_OUT : TAB_I(MAX_ARGS downto 0);
+	signal CYFRA_OUT : natural;
+	signal OPERATIONS_OUT	: TAB_O (MAX_ARGS downto 0);
 begin
 
 	process is																			-- proces bezwarunkowy
@@ -81,7 +81,7 @@ begin
 			PROCESSING <= '0';														-- ustawienie sygnalu pomocniczego na '0'
 			wait for 40 * O_ZEGARA;													-- odczekanie 20-stu okresow zegara
 		end loop;																		-- zakonczenie petli
-		--wait;
+		wait;
 	end process;																		-- zakonczenie procesu
 
 	SENDER_INST: entity work.SENDER												-- instancja odbiornika szeregowego 'SENDER'
@@ -131,7 +131,8 @@ begin
 			CLOCK_SPEED				=> CLOCK_SPEED,								-- czestotliwosc zegara w [Hz]
 			BOD						=> BOD,											-- predkosc odbierania w [bodach]
 			WORD_LEN					=> WORD_LEN,									-- liczba bitow slowa danych (5-8)
-			MAX_NUM_LEN				=> MAX_NUM_LEN
+			MAX_NUM_LEN				=> MAX_NUM_LEN,
+			MAX_ARGS					=> MAX_ARGS
 		)
 		port map(																		-- mapowanie sygnalow do portow
 			R							=> R,												-- sygnal resetowania
@@ -140,10 +141,8 @@ begin
 			PASS						=> DONE_RX,										-- odbierany sygnal szeregowy
 			DONE						=> DONE_CALC,
 			RESULT					=> RESULT,
-			CURR_NATURAL			=> CURR_NATURAL,
-			OPERAND_OUT				=> OPERAND_OUT,
 			STATUS_OUT				=>	STATUS_OUT_CALC,
-			BUFOR1_OUT				=> BUFOR1_OUT,
-			BUFOR2_OUT				=> BUFOR2_OUT
+			ARGS_OUT					=> ARGS_OUT,
+			OPERATIONS_OUT			=> OPERATIONS_OUT
 		);
 end behavioural;
