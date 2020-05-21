@@ -5,7 +5,7 @@ use		ieee.std_logic_unsigned.all;											-- dolaczenie calego pakietu 'STD_LO
 use		ieee.std_logic_misc.all;												-- dolaczenie calego pakietu 'STD_LOGIC_MISC'
 use		work.package_types.all;													-- dolaczenie pakietu z typami 
 
-entity RECEIVER_AND_SENDER_TB is
+entity SUM_TB is
 	generic (
 		constant CLOCK_SPEED		: natural := 20_000_000;					-- czestotliwosc zegara systemowego w [Hz]
 		constant BOD				: natural := 2_000_000;						-- predkosc nadawania w [bodach]
