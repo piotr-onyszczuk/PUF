@@ -1,33 +1,6 @@
-----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
--- Create Date:    17:00:21 05/07/2020 
--- Design Name: 
--- Module Name:    OPERACJE - cialo 
--- Project Name: 
--- Target Devices: 
--- Tool versions: 
--- Description: 
---
--- Dependencies: 
---
--- Revision: 
--- Revision 0.01 - File Created
--- Additional Comments: 
---
-----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
-
--- Uncomment the following library declaration if instantiating
--- any Xilinx primitives in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
+use		work.package_types.all;													-- dolaczenie pakietu z typami 
 
 entity OPERACJE is
 	generic (			
@@ -42,10 +15,7 @@ entity OPERACJE is
 		R    				: in std_logic; 												-- reset
 		PASS				: in std_logic; 												-- mozna czytac liczbe/znak
 		DONE				: out std_logic;												-- informacja o zwrocie
-		RESULT			: out natural		-- wynik/otrzymanyznak
---		WRITING 			: out bit;														-- pisze
---		TIMER_OUT		: out natural range 0 to CLOCK_SPEED/BOD;				-- wyjscie licznika zegara
---		STATUS_OUT		: out STATUSY 													-- wyjscie statusu
+		RESULT			: out natural													-- wynik/otrzymanyznak
 	);
 end OPERACJE;
 
@@ -65,6 +35,7 @@ architecture cialo of OPERACJE is
 	signal BUFOR1	: LICZBA;	                                       -- bufor przetrzymujacy wynik
 	signal BUFOR2	: LICZBA;	                                       -- bufor przetrzymujacy wynik
 	signal RES_BUFOR	: LICZBA;	                                       -- bufor przetrzymujacy wynik
+	signal RES_BUFOR2	: LICZBA;	                                       -- bufor przetrzymujacy wynik
 begin
 	process (C, R) is
 	variable S1_L  : natural :=0;
@@ -148,13 +119,13 @@ begin
 						for I in S1 to 0 loop
 							if(S1_L /= 0) then
 								S1_L := S1_L - 1;
-								TMP1 := BUFFOR1(S1_L);
+								TMP1 := BUFOR1(S1_L);
 							else
 								TMP1 := 0;
 							end if;
 							if(S2_L /= 0) then
 								S2_L := S2_L - 1;
-								TMP2 := BUFFOR1(S2_L);
+								TMP2 := BUFOR1(S2_L);
 							else
 								TMP2 := 0;
 							end if;
@@ -165,13 +136,13 @@ begin
 						for I in S2 to 0 loop
 							if(S1_L /= 0) then
 								S1_L := S1_L - 1;
-								TMP1 := BUFFOR1(S1_L);
+								TMP1 := BUFOR2(S1_L);
 							else
 								TMP1 := 0;
 							end if;
 							if(S2_L /= 0) then
 								S2_L := S2_L - 1;
-								TMP2 := BUFFOR1(S2_L);
+								TMP2 := BUFOR2(S2_L);
 							else
 								TMP2 := 0;
 							end if;
