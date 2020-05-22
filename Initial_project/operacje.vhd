@@ -17,7 +17,7 @@ entity OPERACJE is
 		R    				: in std_logic; 												-- reset
 		PASS				: in std_logic; 												-- mozna czytac liczbe/znak
 		DONE				: out std_logic;												-- informacja o zwrocie
-		RESULT			: out natural;													-- wynik/otrzymanyznak
+		RESULT			: out integer ;--range -127 to 128;						-- wynik/otrzymanyznak
 		STATUS_OUT		: out STATUSES;
 		OPERAND_OUT		: out OPERANDS;
 		ARGS_OUT			: out TAB_I (MAX_ARGS downto 0);
@@ -41,6 +41,7 @@ architecture cialo of OPERACJE is
 	signal READ_NUM : std_logic := '0';
 	signal ARG_READING : std_logic := '0';
 	signal BRACKET_OPEN : std_logic := '0';
+	signal RESULT_FOUND : std_logic := '0';
 	signal CURR_SIGN : OPERANDS := NONE;
 	signal ARGUMENTS : TAB_I(MAX_ARGS downto 0) := (others => 0);
 	signal ARGS_COUNT : natural :=0;
@@ -50,6 +51,7 @@ architecture cialo of OPERACJE is
 begin
 	process (C, R) is
 	variable D		: natural :=0;
+	variable RESULT_TMP : integer :=0 ;-- range -127 to 128 := 0;
    begin
 		if (R = '1') then																	-- resetowanie zmiennych						
 			ARGS_COUNT <= 0;
@@ -63,6 +65,7 @@ begin
 			READ_NUM <= '0';
 			ARG_READING <= '0';
 			BRACKET_OPEN <= '0';
+			RESULT_FOUND <= '0';
 		elsif (C'event and C='1') then
 			D := CONV_INTEGER(CALC_D_IN);
 			if (STATUS = ARGUMENTY) then
@@ -158,7 +161,35 @@ begin
 					end if;
 				end if;
 			elsif (STATUS = WYNIK) then
-				STATUS <= WYNIK; -- TODO
+				-- STATUS <= WYNIK; -- TODO
+				if RESULT_FOUND = '0' then 
+					if not(ARGS_COUNT = (OPS_COUNT + 1)) then
+						SIZE 		<= 0;
+						STATUS 	<= ARGUMENTY;
+						DONE     <= '0';
+						TIMER 	<= 0;
+						RESULT   <= ERR_CO;
+						WAS_READ	<= '0';
+						READ_NUM <= '0';
+						ARG_READING <= '0';
+						BRACKET_OPEN <= '0';
+						ARGS_COUNT <= 0;
+						OPS_COUNT <= 0;
+						SIZE <= 0;
+						RESULT_FOUND <= '0';
+					else
+						RESULT_TMP := ARGUMENTS(ARGS_COUNT-1);
+						summing: for op in MAX_ARGS downto 0 loop
+							if (OPERATIONS(op) = PLUS) then
+								RESULT_TMP := RESULT_TMP + ARGUMENTS(op);
+						   elsif (OPERATIONS(op) = MINUS) then
+								RESULT_TMP := RESULT_TMP - ARGUMENTS(op);
+							end if;
+						end loop summing;
+						RESULT <= RESULT_TMP;
+						RESULT_FOUND <= '1';
+					end if;
+				end if;
 			else
 				SIZE 		<= 0;
 				STATUS 	<= ARGUMENTY;
@@ -172,6 +203,7 @@ begin
 				ARGS_COUNT <= 0;
 				OPS_COUNT <= 0;
 				SIZE <= 0;
+				RESULT_FOUND <= '0';
 			end if;
 		end if;
 		STATUS_OUT <= STATUS;

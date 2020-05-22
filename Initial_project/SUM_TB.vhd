@@ -7,8 +7,8 @@ use		work.package_types.all;													-- dolaczenie pakietu z typami
 
 entity SUM_TB is
 	generic (
-		constant CLOCK_SPEED		: natural := 20_000_000;					-- czestotliwosc zegara systemowego w [Hz]
-		constant BOD				: natural := 2_000_000;						-- predkosc nadawania w [bodach]
+		constant CLOCK_SPEED		: natural := 200_000_000;					-- czestotliwosc zegara systemowego w [Hz]
+		constant BOD				: natural := 20_000_000;						-- predkosc nadawania w [bodach]
 		constant WORD_LEN			: natural := 8;								-- liczba bitow slowa danych (5-8)
 		constant PAR_LEN			: natural := 1;								-- liczba bitow parzystosci (0-1)
 		constant STOP_LEN			: natural := 2;								-- liczba bitow stopu (1-2)
@@ -41,7 +41,7 @@ architecture behavioural of SUM_TB is
 	signal WRITING					: bit;											-- obserwowane wyjscie 'WRITING'
 	signal CALC_IN					: natural;
 	signal DONE_CALC				: std_logic;
-	signal RESULT					: natural;
+	signal RESULT					: integer;
 	signal STATUS_OUT_CALC		: STATUSES;
 	signal ARGS_OUT : TAB_I(MAX_ARGS downto 0);
 	signal CYFRA_OUT : natural;
