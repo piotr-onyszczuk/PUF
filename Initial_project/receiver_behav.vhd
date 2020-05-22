@@ -28,7 +28,6 @@ architecture behavioural of RECEIVER_TB is
 	signal ERROR					: std_logic;									-- obserwowane wyjscie 'ERROR'
 	signal DONE						: std_logic;									-- obserwowane wyjscie 'DONE'
 	signal D	:std_logic_vector(WORD_LEN-1 downto 0) := "00000000";		-- obserwowana dana wyjsciowa
-	signal WRITING					: bit;											-- obserwowane wyjscie 'WRITING'
 	signal TIMER_OUT				: natural range 0 to CLOCK_SPEED/BOD;	-- obserwowane wyjscie 'TIMER_OUT'
 	signal STATUS_OUT				: STATUSY;										-- obserwowane wyjscie 'STATUS_OUT'
 	signal TRANSMITTING_PARITY	: std_logic := '0';							-- sygnal pomocniczy (do debugowania) informujacy o nadawaniu bitu parzystosci
@@ -90,7 +89,6 @@ begin
 			START						=> START,										-- informacja o rozpoczeciu nadawania
 			ERROR						=> ERROR,										-- flaga wykrycia bledu w odbiorze
 			DONE						=> DONE,											-- flaga zakonczenia odbioru
-			WRITING					=> WRITING,										-- flaga pisania
 			TIMER_OUT				=> TIMER_OUT,									-- obserwowany licznik zegara
 			STATUS_OUT				=> STATUS_OUT									-- obserwowany status
 		);

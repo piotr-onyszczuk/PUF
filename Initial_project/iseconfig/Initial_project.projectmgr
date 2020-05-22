@@ -77,13 +77,13 @@
          <ClosedNodesVersion>2</ClosedNodesVersion>
       </ClosedNodes>
       <SelectedItems>
-         <SelectedItem>OPERACJE_INST - OPERACJE - cialo (/home/ise/Desktop/PUF/Initial_project/operacje.vhd)</SelectedItem>
+         <SelectedItem>SUM_TB - behavioural (/home/ise/Desktop/PUF/Initial_project/SUM_TB.vhd)</SelectedItem>
       </SelectedItems>
       <ScrollbarPosition orientation="vertical" >1</ScrollbarPosition>
       <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
       <ViewHeaderState orientation="horizontal" >000000ff00000000000000010000000100000000000000000000000000000000020200000001000000010000006400000238000000020000000000000000000000000200000064ffffffff000000810000000300000002000002380000000100000003000000000000000100000003</ViewHeaderState>
       <UserChangedColumnWidths orientation="horizontal" >true</UserChangedColumnWidths>
-      <CurrentItem>OPERACJE_INST - OPERACJE - cialo (/home/ise/Desktop/PUF/Initial_project/operacje.vhd)</CurrentItem>
+      <CurrentItem>SUM_TB - behavioural (/home/ise/Desktop/PUF/Initial_project/SUM_TB.vhd)</CurrentItem>
    </ItemView>
    <ItemView engineview="BehavioralSim" sourcetype="" guiview="Process" >
       <ClosedNodes>

@@ -8,12 +8,11 @@ use		work.package_types.all;													-- dolaczenie pakietu z typami
 entity SUM_TB is
 	generic (
 		constant CLOCK_SPEED		: natural := 200_000_000;					-- czestotliwosc zegara systemowego w [Hz]
-		constant BOD				: natural := 20_000_000;						-- predkosc nadawania w [bodach]
+		constant BOD				: natural := 20_000_000;					-- predkosc nadawania w [bodach]
 		constant WORD_LEN			: natural := 8;								-- liczba bitow slowa danych (5-8)
 		constant PAR_LEN			: natural := 1;								-- liczba bitow parzystosci (0-1)
 		constant STOP_LEN			: natural := 2;								-- liczba bitow stopu (1-2)
-		constant MAX_NUM_LEN		: natural := 5;
-		constant MAX_ARGS			: natural := 5
+		constant MAX_ARGS			: natural := 5									-- maksymalna liczba argumentow zadania
 	);
 end SUM_TB;
 
@@ -21,7 +20,7 @@ architecture behavioural of SUM_TB is
 
 	constant O_ZEGARA				: time := 1 sec/CLOCK_SPEED;				-- okres zegara systemowego
 	constant O_BITU				: time := 1 sec/BOD;							-- okres czasu trwania jednego bodu
-	constant zadanie 				: string := "(+521)+(-41)+(12)-36=";
+	constant zadanie 				: string := "(+521)+(-41)+(12)-36=";	-- zadanie kalkulatora
 	signal R							: std_logic := '0';							-- symulowany sygnal resetujacacy
 	signal C							: std_logic := '1';							-- symulowany zegar taktujacy inicjowany na '1'
 	signal RX_TX					: std_logic;									-- obserwowane wyjscie 'TX'
@@ -39,13 +38,12 @@ architecture behavioural of SUM_TB is
 	signal BIT_NUMBER				: natural range 0 to WORD_LEN;			-- obserwowane wyjscie z numerem bitu
 	signal ERROR					: std_logic;									-- obserwowane wyjscie 'ERROR'
 	signal WRITING					: bit;											-- obserwowane wyjscie 'WRITING'
-	signal CALC_IN					: natural;
-	signal DONE_CALC				: std_logic;
-	signal RESULT					: integer;
-	signal STATUS_OUT_CALC		: STATUSES;
-	signal ARGS_OUT : TAB_I(MAX_ARGS downto 0);
-	signal CYFRA_OUT : natural;
-	signal OPERATIONS_OUT	: TAB_O (MAX_ARGS downto 0);
+	signal DONE_CALC				: std_logic;									-- obserwowane wyjscie 'DONE' kalkulatora
+	signal RESULT					: integer;										-- wynik obliczen kalkulatora
+	signal STATUS_OUT_CALC		: STATUSES;										-- obserwowane wyjscie 'STATUS_OUT' kalkulatora
+	signal ARGS_OUT				: TAB_I(MAX_ARGS downto 0);				-- obserowane argumenty kalkulatora
+	signal CYFRA_OUT				: natural;										-- aktualnie przetwarzana cyfra w kalkulatorze
+	signal OPERATIONS_OUT		: TAB_O (MAX_ARGS downto 0);				-- obserwowane operacje kalkulatora
 begin
 
 	process is																			-- proces bezwarunkowy
@@ -62,14 +60,14 @@ begin
 	process is																			-- proces bezwarunkowy
 	begin																					-- czesc wykonawcza procesu
 		START		<= '0';																-- incjalizacja sygnalu 'START' na wartosci spoczynkowa
-		for i in 1 to zadanie'length loop				-- petla po kolenych wysylanych znakach
+		for i in 1 to zadanie'length loop										-- petla po kolenych wysylanych znakach
 			D_IN		<= CONV_STD_LOGIC_VECTOR(character'pos(zadanie(i)),D_IN'length); -- pobranie i konwersja 'i-tego' znaku ASCII
-			wait for 200 ns;																-- odczekanie 200 ns																		-- rozpoczecie petli nieskonczonej
+			wait for 200 ns;															-- odczekanie 200 ns
 			START 		<= '1';														-- ustawienie 'START' na wartosc bitu START
 			PROCESSING 	<= '1';														-- ustawienie sygnalu pomocniczego na '1'
 			wait for O_BITU;															-- odczekanie jednego bodu
 			for i in 0 to WORD_LEN - 1 loop										-- petla po kolejnych bitach slowa danych 'D'
-			wait for O_BITU;														-- odczekanie jednego bodu
+			wait for O_BITU;															-- odczekanie jednego bodu
 			end loop;																	-- zakonczenie petli
 			START <= '0';																-- wylaczenie bitu nadawania danej
 			if (par_len = 1) then													-- badanie aktywowania bitu parzystosci
@@ -79,7 +77,7 @@ begin
 				wait for O_BITU;														-- odczekanie jednego bodu
 			end loop;																	-- zakonczenie petli
 			PROCESSING <= '0';														-- ustawienie sygnalu pomocniczego na '0'
-			wait for 40 * O_ZEGARA;													-- odczekanie 20-stu okresow zegara
+			wait for 40 * O_ZEGARA;													-- odczekanie 40-stu okresow zegara
 		end loop;																		-- zakonczenie petli
 		wait;
 	end process;																		-- zakonczenie procesu
@@ -131,18 +129,17 @@ begin
 			CLOCK_SPEED				=> CLOCK_SPEED,								-- czestotliwosc zegara w [Hz]
 			BOD						=> BOD,											-- predkosc odbierania w [bodach]
 			WORD_LEN					=> WORD_LEN,									-- liczba bitow slowa danych (5-8)
-			MAX_NUM_LEN				=> MAX_NUM_LEN,
-			MAX_ARGS					=> MAX_ARGS
+			MAX_ARGS					=> MAX_ARGS										-- maksymalna liczba argumentow zadania
 		)
 		port map(																		-- mapowanie sygnalow do portow
 			R							=> R,												-- sygnal resetowania
 			C							=> C,												-- zegar taktujacy
 			CALC_D_IN				=> D_OUT,										-- slowo danych
 			PASS						=> DONE_RX,										-- odbierany sygnal szeregowy
-			DONE						=> DONE_CALC,
-			RESULT					=> RESULT,
-			STATUS_OUT				=>	STATUS_OUT_CALC,
-			ARGS_OUT					=> ARGS_OUT,
-			OPERATIONS_OUT			=> OPERATIONS_OUT
+			DONE						=> DONE_CALC,									-- obserwowane wyjscie 'DONE' kalkulatora
+			RESULT					=> RESULT,										-- rezultat obliczen
+			STATUS_OUT				=>	STATUS_OUT_CALC,							-- obserwowany status kalkulatora
+			ARGS_OUT					=> ARGS_OUT,									-- obserwowane argumenty kalkulatora
+			OPERATIONS_OUT			=> OPERATIONS_OUT								-- obserowane operacje kalkulatora
 		);
 end behavioural;

@@ -106,7 +106,7 @@ begin
 			STOP_LEN					=> STOP_LEN										-- liczba bitow stopu (1-2)
 		)
 		port map(																		-- mapowanie sygnalow do portow
-			R							=> R,												-- sygnal resetowania
+		R							=> R,												-- sygnal resetowania
 			C							=> C,												-- zegar taktujacy
 			D							=> D_OUT,										-- slowo danych
 			RX							=> RX_TX,										-- odbierany sygnal szeregowy
@@ -116,5 +116,5 @@ begin
 			WRITING					=> WRITING,										-- flaga pisania
 			TIMER_OUT				=> TIMER_OUT_RX,								-- obserwowany licznik zegara
 			STATUS_OUT				=> STATUS_OUT_RX								-- obserwowany status
-		);
+			);
 end behavioural;
