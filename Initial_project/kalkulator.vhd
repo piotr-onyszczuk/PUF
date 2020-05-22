@@ -3,7 +3,7 @@ use		IEEE.STD_LOGIC_1164.ALL;													-- dolaczenie calego pakietu 'STD_LOGI
 use		ieee.std_logic_unsigned.all;												-- dolaczenie calego pakietu 'STD_LOGIC_UNSIGNED'
 use		work.package_types.all;														-- dolaczenie pakietu z typami 
 
-entity OPERACJE is
+entity KALKULATOR is
 	generic (
 		WORD_LEN			: natural := 8;												-- dlugosc slowa wejsciowego
 		MAX_ARGS			: natural := 5													-- maksymalna liczba argumentow zadania
@@ -19,9 +19,9 @@ entity OPERACJE is
 		ARGS_OUT			: out TAB_I (MAX_ARGS downto 0);							-- lista argumentow zadania (do obserwowania)
 		OPERATIONS_OUT	: out TAB_O (MAX_ARGS downto 0)							-- lista operacji zadania (do obserowania)
 	);
-end OPERACJE;
+end KALKULATOR;
 
-architecture cialo of OPERACJE is
+architecture cialo of KALKULATOR is
 	signal STATUS		: STATUSES;														-- status progaramu
 	constant NUM_CO	: natural := 48;												-- '0' ASCII
 	constant PL_CO		: natural := 43;												-- '+' ASCII

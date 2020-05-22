@@ -124,7 +124,7 @@ begin
 			STATUS_OUT				=> STATUS_OUT_RX								-- obserwowany status
 		);
 		
-	OPERACJE_INST: entity work.OPERACJE											-- instancja sumatora szeregowego
+	KALKULATOR_INST: entity work.KALKULATOR									-- instancja kalkulatora
 		generic map(																	-- mapowanie parametrow biezacych
 			MAX_ARGS					=> MAX_ARGS										-- maksymalna liczba argumentow zadania
 		)
