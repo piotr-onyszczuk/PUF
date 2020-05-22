@@ -126,9 +126,6 @@ begin
 		
 	OPERACJE_INST: entity work.OPERACJE											-- instancja sumatora szeregowego
 		generic map(																	-- mapowanie parametrow biezacych
-			CLOCK_SPEED				=> CLOCK_SPEED,								-- czestotliwosc zegara w [Hz]
-			BOD						=> BOD,											-- predkosc odbierania w [bodach]
-			WORD_LEN					=> WORD_LEN,									-- liczba bitow slowa danych (5-8)
 			MAX_ARGS					=> MAX_ARGS										-- maksymalna liczba argumentow zadania
 		)
 		port map(																		-- mapowanie sygnalow do portow

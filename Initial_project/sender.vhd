@@ -6,7 +6,7 @@ use		work.package_types.all;													-- dolaczenie pakietu z typami
 
 entity SENDER is																		-- deklaracja sprzegu SENDER
 	generic (
-		WORD_LEN			: natural := 8 ;											-- dlugosc slowa wejsciowego
+		WORD_LEN			: natural := 8;											-- dlugosc slowa wejsciowego
 		CLOCK_SPEED		: natural := 20_000_000;								-- czestotliwosc zegara
 		BOD				: natural := 5_000_000;									-- predkosc nadawania
 		PAR_LEN			: natural := 1;											-- czy jest bit parzystosci

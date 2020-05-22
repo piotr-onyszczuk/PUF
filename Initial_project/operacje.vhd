@@ -6,8 +6,6 @@ use		work.package_types.all;														-- dolaczenie pakietu z typami
 entity OPERACJE is
 	generic (
 		WORD_LEN			: natural := 8;												-- dlugosc slowa wejsciowego
-		CLOCK_SPEED		: natural := 20_000_000;									-- czestotliwosc zegara
-		BOD				: natural := 5_000_000;										-- predkosc nadawania
 		MAX_ARGS			: natural := 5													-- maksymalna liczba argumentow zadania
 	);
 	port (
@@ -25,8 +23,6 @@ end OPERACJE;
 
 architecture cialo of OPERACJE is
 	signal STATUS		: STATUSES;														-- status progaramu
-	signal TIMER		: natural range 0 to CLOCK_SPEED/BOD;					-- licznik zegara
-	constant TIME_T	: natural := CLOCK_SPEED/BOD;								-- limit zegara
 	constant NUM_CO	: natural := 48;												-- '0' ASCII
 	constant PL_CO		: natural := 43;												-- '+' ASCII
 	constant SU_CO		: natural := 45;												-- '-' ASCII
@@ -55,7 +51,6 @@ begin
 			OPS_COUNT	<= 0;
 			STATUS		<= ARGUMENTY;
 			DONE			<= '0';
-			TIMER			<= 0;
 			RESULT		<= 0;
 			WAS_READ		<= '0';
 			READ_NUM		<= '0';
@@ -154,7 +149,6 @@ begin
 					if not(ARGS_COUNT = (OPS_COUNT + 1)) then
 						STATUS 	<= ARGUMENTY;
 						DONE     <= '0';
-						TIMER 	<= 0;
 						RESULT   <= ERR_CO;
 						WAS_READ	<= '0';
 						READ_NUM <= '0';
@@ -180,7 +174,6 @@ begin
 			else																				-- niezidentyfikowany blad
 				STATUS		<= ARGUMENTY;
 				DONE			<= '0';
-				TIMER			<= 0;
 				RESULT		<= ERR_CO;
 				WAS_READ		<= '0';
 				READ_NUM		<= '0';
