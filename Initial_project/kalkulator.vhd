@@ -14,6 +14,7 @@ entity KALKULATOR is
 		R					: in std_logic;												-- reset
 		PASS				: in std_logic;												-- mozna czytac liczbe/znak
 		DONE				: out std_logic;												-- informacja o zwrocie
+		ERR_OUT	      : out std_logic;							 					-- informacja o bledzie
 		RESULT			: out integer;													-- wynik/otrzymanyznak
 		STATUS_OUT		: out STATUSES;												-- wyjscie statusow
 		ARGS_OUT			: out TAB_I (MAX_ARGS downto 0);							-- lista argumentow zadania (do obserwowania)
@@ -27,7 +28,6 @@ architecture cialo of KALKULATOR is
 	constant PL_CO		: natural := 43;												-- '+' ASCII
 	constant SU_CO		: natural := 45;												-- '-' ASCII
 	constant RES_CO	: natural := 61;												-- '=' ASCII
-	constant ERR_CO	: natural := 69;												-- 'E' ASCII
 	constant BROP_CO	: natural := 40;												-- '(' ASCII
 	constant BRCL_CO	: natural := 41;												-- ')' ASCII
 	signal WAS_READ	: std_logic := '0';											-- czy wczytano aktualny znak
@@ -35,6 +35,7 @@ architecture cialo of KALKULATOR is
 	signal ARG_READING: std_logic := '0';											-- czy jestesmy w trakcie wczytywania liczby
 	signal BRACKET_OPEN: std_logic := '0';											-- czy otwarty nawias
 	signal RESULT_FOUND: std_logic := '0';											-- czy obliczono wynik
+	signal ERR	      : std_logic := '0';											-- wewnetrzna informacja o bledzie
 	signal CURR_SIGN	: OPERANDS := NONE;											-- aktualny znak liczby (w przypadku wystapienia nawiasu)
 	signal ARGUMENTS	: TAB_I(MAX_ARGS downto 0) := (others => 0);			-- tablica argumentow
 	signal ARGS_COUNT	: natural :=0;													-- liczba argumentow
@@ -44,7 +45,7 @@ architecture cialo of KALKULATOR is
 begin
 	process (C, R) is
 	variable D				: natural :=0;												-- przekonwertowane wejscie
-	variable RESULT_TMP	: integer :=0;												-- zmienna pomocnicza
+	variable RESULT_TMP	: integer :=0;												-- zmienna pomocnicza do sumowania
    begin
 		if (R = '1') then																	-- resetowanie zmiennych
 			ARGS_COUNT	<= 0;
@@ -52,25 +53,28 @@ begin
 			STATUS		<= ARGUMENTY;
 			DONE			<= '0';
 			RESULT		<= 0;
+			ERR			<= '0';
 			WAS_READ		<= '0';
 			READ_NUM		<= '0';
 			ARG_READING	<= '0';
 			BRACKET_OPEN<= '0';
 			RESULT_FOUND<= '0';
-		elsif (C'event and C='1') then
+			OPERATIONS	<= (others => NONE);
+			ARGUMENTS 	<= (others => 0);
+		elsif (C'event and C='1' and ERR = '0') then
 			D := CONV_INTEGER(CALC_D_IN);												-- konwersja wejscia
 			if (STATUS = ARGUMENTY) then												-- wczytywanie argumentow
 				if (PASS = '1' and WAS_READ = '0') then							-- nowy symbol
 					WAS_READ <= '1';														-- oznaczenie przeczytania symbolu
 					if (D = PL_CO) then													-- '+'
 						if (ARG_READING = '0' and BRACKET_OPEN = '0') then		-- sprawdzenie czy nie ma dwoch operatorow po kolei
-							RESULT <= ERR_CO;
+							ERR <= '1';
 						end if;
 						if (BRACKET_OPEN = '1') then									-- byl nawias - oznaczenie znaku liczby
 							if (CURR_SIGN = NONE) then
 								CURR_SIGN <= PLUS;
 							else																-- nie moze byc dwoch operatorow pod nawiasem
-								RESULT <= ERR_CO;
+								ERR <= '1';
 							end if;
 						else
 							ARG_READING									<= '0';			-- koniec wczytywania liczby
@@ -82,13 +86,13 @@ begin
 						end if;
 					elsif (D = SU_CO) then												-- '-'
 						if (ARG_READING = '0' and BRACKET_OPEN = '0') then		-- sprawdzenie czy nie ma dwoch operatorow po kolei
-							RESULT <= ERR_CO;
+							ERR <= '1';
 						end if;
 						if (BRACKET_OPEN = '1') then									-- byl nawias - oznaczenie znaku liczby
 							if (CURR_SIGN = NONE) then
 								CURR_SIGN <= MINUS;
 							else																-- nie moze byc dwoch operatorow pod nawiasem
-								RESULT <= ERR_CO;
+								ERR <= '1';
 							end if;
 						else
 							ARG_READING									<= '0';			-- koniec wczytywania liczby
@@ -100,16 +104,16 @@ begin
 						end if;
 					elsif (D = BROP_CO) then											-- '('
 						if(ARG_READING = '1' or BRACKET_OPEN = '1') then		-- nie mozna otworzyc nawiasu w trakcie liczby ani przed zamknieciem poprzedniego
-							RESULT <= ERR_CO;
+							ERR <= '1';
 						end if;
 							BRACKET_OPEN <= '1';											-- otwarto nawias
 					elsif (D = BRCL_CO) then											-- ')'
 						if(ARG_READING = '0' or BRACKET_OPEN = '0') then		-- nie mozna zamknac nawiasu bezposrednio po operatorze ani przed otwarciem nawiasu
-							RESULT <= ERR_CO;
+							ERR <= '1';
 						end if;
 							BRACKET_OPEN <= '0';											-- zamknieto nawias
 							if (CURR_SIGN = RET) then									-- niezidentyfikowany blad
-								RESULT <= ERR_CO;
+								ERR <= '1';
 							end if;
 							if (CURR_SIGN = MINUS) then								-- byl '-' pod nawiasem
 								ARGUMENTS(0) <= -ARGUMENTS(0);						-- negacja
@@ -117,10 +121,10 @@ begin
 							CURR_SIGN <= NONE;											-- reset
 					elsif (D = RES_CO) then												-- '='
 						if (ARG_READING = '0') then									-- sprawdzenie czy nie ma dwoch operatorow po kolei
-							RESULT <= ERR_CO;
+							ERR <= '1';
 						end if;
 						if (BRACKET_OPEN = '1') then									-- nalezy zamknac nawias przed '='
-							RESULT <= ERR_CO;
+							ERR <= '1';
 						end if;
 						ARG_READING	<= '0';												-- koniec czytania argumentu
 						STATUS		<= WYNIK;											-- zmiana statusu
@@ -135,7 +139,7 @@ begin
 							OST_CYFRA <=  D - NUM_CO;									-- zapamietanie cyfry
 							READ_NUM <='1';												-- wczytano cyfre
 					else
-						RESULT <= ERR_CO;													-- niezidentyfikowany blad
+						ERR <= '1';												         -- niezidentyfikowany blad
 					end if;
 				elsif (PASS = '0') then													-- wejscie nieaktywne
 					WAS_READ <= '0';														-- reset
@@ -144,46 +148,29 @@ begin
 						ARGUMENTS(0)	<= ARGUMENTS(0) + OST_CYFRA;				-- zwiekszenie argumentu
 					end if;
 				end if;
-			elsif (STATUS = WYNIK) then
-				if RESULT_FOUND = '0' then 
-					if not(ARGS_COUNT = (OPS_COUNT + 1)) then
-						STATUS 	<= ARGUMENTY;
-						DONE     <= '0';
-						RESULT   <= ERR_CO;
-						WAS_READ	<= '0';
-						READ_NUM <= '0';
-						ARG_READING <= '0';
-						BRACKET_OPEN <= '0';
-						ARGS_COUNT <= 0;
-						OPS_COUNT <= 0;
-						RESULT_FOUND <= '0';
+			elsif (STATUS = WYNIK) then												-- obsluga statusu wyniku
+				if RESULT_FOUND = '0' then 											-- sprawdzenie czy wynik zostal ju¿ obliczony
+					if not(ARGS_COUNT = (OPS_COUNT + 1)) then						-- poprawnoœæ ilosci operatorow vs liczby argumentów
+						ERR <= '1';
 					else
-						RESULT_TMP := ARGUMENTS(ARGS_COUNT-1);
-						summing: for op in MAX_ARGS downto 0 loop
-							if (OPERATIONS(op) = PLUS) then
-								RESULT_TMP := RESULT_TMP + ARGUMENTS(op);
-						   elsif (OPERATIONS(op) = MINUS) then
-								RESULT_TMP := RESULT_TMP - ARGUMENTS(op);
+						RESULT_TMP := ARGUMENTS(ARGS_COUNT-1);						-- przypisanie do zmiennej pomocniczej pierwszego argumentu
+						summing: for op in MAX_ARGS downto 0 loop					-- petla po pozostalych argumentach
+							if (OPERATIONS(op) = PLUS) then							-- jesli kolejna operacja to plus
+								RESULT_TMP := RESULT_TMP + ARGUMENTS(op);			-- dodanie kolejnego argumentu do wyniku
+						   elsif (OPERATIONS(op) = MINUS) then   					-- jesli kolejna operacja to minus
+								RESULT_TMP := RESULT_TMP - ARGUMENTS(op);			-- odjecie kolejnego argumentu od wyniku
 							end if;
-						end loop summing;
-						RESULT <= RESULT_TMP;
-						RESULT_FOUND <= '1';
-						DONE <= '1';
+						end loop summing;													-- koniec petli summing
+						RESULT <= RESULT_TMP;											-- przypisanie wyniku do sygnalu
+						RESULT_FOUND <= '1';												-- wynik zostal obliczony
+						DONE <= '1';														-- zadanie wykonane
 					end if;
 				end if;
-			else																				-- niezidentyfikowany blad
-				STATUS		<= ARGUMENTY;
-				DONE			<= '0';
-				RESULT		<= ERR_CO;
-				WAS_READ		<= '0';
-				READ_NUM		<= '0';
-				ARG_READING	<= '0';
-				BRACKET_OPEN<= '0';
-				ARGS_COUNT	<= 0;
-				OPS_COUNT	<= 0;
-				RESULT_FOUND<= '0';
+			else
+				ERR <= '1';																	-- niezidentyfikowany blad
 			end if;
 		end if;
+		ERR_OUT			<= ERR;															-- przekazanie na wyjscie
 		STATUS_OUT		<= STATUS;														-- przekazanie na wyjscie
 		ARGS_OUT			<= ARGUMENTS;													-- przekazanie na wyjscie
 		OPERATIONS_OUT	<= OPERATIONS;													-- przekazanie na wyjscie

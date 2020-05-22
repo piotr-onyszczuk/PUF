@@ -43,6 +43,8 @@ architecture behavioural of CALC_TB is
 	signal ARGS_OUT				: TAB_I(MAX_ARGS downto 0);				-- obserowane argumenty kalkulatora
 	signal CYFRA_OUT				: natural;										-- aktualnie przetwarzana cyfra w kalkulatorze
 	signal OPERATIONS_OUT		: TAB_O (MAX_ARGS downto 0);				-- obserwowane operacje kalkulatora
+	signal ERROR_CALC				: std_logic;									-- obserwowane bledy kalkulatora
+
 begin
 
 	process is																			-- proces bezwarunkowy
@@ -133,6 +135,7 @@ begin
 			RESULT					=> RESULT,										-- rezultat obliczen
 			STATUS_OUT				=>	STATUS_OUT_CALC,							-- obserwowany status kalkulatora
 			ARGS_OUT					=> ARGS_OUT,									-- obserwowane argumenty kalkulatora
-			OPERATIONS_OUT			=> OPERATIONS_OUT								-- obserowane operacje kalkulatora
+			OPERATIONS_OUT			=> OPERATIONS_OUT,							-- obserwowane operacje kalkulatora
+			ERR_OUT              => ERROR_CALC									-- obserwowane bledy kalkulatora
 		);
 end behavioural;
