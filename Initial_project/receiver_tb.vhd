@@ -10,7 +10,6 @@ entity RECEIVER_TB is
 		constant CLOCK_SPEED		: natural := 20_000_000;					-- czestotliwosc zegara systemowego w [Hz]
 		constant BOD				: natural := 2_000_000;						-- predkosc nadawania w [bodach]
 		constant WORD_LEN			: natural := 8;								-- liczba bitow slowa danych (5-8)
-		constant PAR_LEN			: natural := 1;								-- liczba bitow parzystosci (0-1)
 		constant STOP_LEN			: natural := 2									-- liczba bitow stopu (1-2)
 	);
 end RECEIVER_TB;
@@ -59,10 +58,8 @@ begin
 			end loop;																	-- zakonczenie petli
 			START					 	<= '0';											-- wylaczenie bitu nadawania danej
 			TRANSMITTING_PARITY 	<= '1';											-- wlaczenie bitu nadawania parzystosci
-			if (par_len = 1) then													-- badanie aktywowania bitu parzystosci
-				RX<= XOR_REDUCE(SLOWO);												-- ustawienie 'RX' na wartosc bitu parzystosci	
-				wait for O_BITU;														-- odczekanie jednego bodu
-			end if;																		-- zakonczenie instukcji warunkowej
+			RX<= XOR_REDUCE(SLOWO);													-- ustawienie 'RX' na wartosc bitu parzystosci	
+			wait for O_BITU;															-- odczekanie jednego bodu
 			TRANSMITTING_PARITY <='0';												-- wylaczenie bitu nadawania parzystosci
 			for i in 0 to STOP_LEN - 1 loop										-- petla po liczbie bitow STOP
 				RX <= '0';																-- ustawienie 'RX' na wartosc bitu STOP
@@ -78,7 +75,6 @@ begin
 			CLOCK_SPEED				=> CLOCK_SPEED,								-- czestotliwosc zegata w [Hz]
 			BOD						=> BOD,											-- predkosc odbierania w [bodach]
 			WORD_LEN					=> WORD_LEN,									-- liczba bitow slowa danych (5-8)
-			PAR_LEN					=> PAR_LEN,										-- liczba bitow parzystosci (0-1)
 			STOP_LEN					=> STOP_LEN										-- liczba bitow stopu (1-2)
 		)
 		port map(																		-- mapowanie sygnalow do portow

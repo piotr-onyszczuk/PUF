@@ -10,7 +10,6 @@ entity CALC_TB is
 		constant CLOCK_SPEED		: natural := 200_000_000;					-- czestotliwosc zegara systemowego w [Hz]
 		constant BOD				: natural := 20_000_000;					-- predkosc nadawania w [bodach]
 		constant WORD_LEN			: natural := 8;								-- liczba bitow slowa danych (5-8)
-		constant PAR_LEN			: natural := 1;								-- liczba bitow parzystosci (0-1)
 		constant STOP_LEN			: natural := 2;								-- liczba bitow stopu (1-2)
 		constant MAX_ARGS			: natural := 5									-- maksymalna liczba argumentow zadania
 	);
@@ -70,9 +69,7 @@ begin
 			wait for O_BITU;															-- odczekanie jednego bodu
 			end loop;																	-- zakonczenie petli
 			START <= '0';																-- wylaczenie bitu nadawania danej
-			if (par_len = 1) then													-- badanie aktywowania bitu parzystosci
-				wait for O_BITU;														-- odczekanie jednego bodu
-			end if;																		-- zakonczenie instukcji warunkowej
+			wait for O_BITU;															-- odczekanie jednego bodu (parzystosc)
 			for i in 0 to STOP_LEN - 1 loop										-- petla po liczbie bitow STOP
 				wait for O_BITU;														-- odczekanie jednego bodu
 			end loop;																	-- zakonczenie petli
@@ -87,7 +84,6 @@ begin
 			CLOCK_SPEED				=> CLOCK_SPEED,								-- czestotliwosc zegara w [Hz]
 			BOD						=> BOD,											-- predkosc odbierania w [bodach]
 			WORD_LEN					=> WORD_LEN,									-- liczba bitow slowa danych (5-8)
-			PAR_LEN					=> PAR_LEN,										-- liczba bitow parzystosci (0-1)
 			STOP_LEN					=> STOP_LEN										-- liczba bitow stopu (1-2)
 		)
 		port map(																		-- mapowanie sygnalow do portow
@@ -108,7 +104,6 @@ begin
 			CLOCK_SPEED				=> CLOCK_SPEED,								-- czestotliwosc zegara w [Hz]
 			BOD						=> BOD,											-- predkosc odbierania w [bodach]
 			WORD_LEN					=> WORD_LEN,									-- liczba bitow slowa danych (5-8)
-			PAR_LEN					=> PAR_LEN,										-- liczba bitow parzystosci (0-1)
 			STOP_LEN					=> STOP_LEN										-- liczba bitow stopu (1-2)
 		)
 		port map(																		-- mapowanie sygnalow do portow
@@ -126,7 +121,8 @@ begin
 		
 	KALKULATOR_INST: entity work.KALKULATOR									-- instancja kalkulatora
 		generic map(																	-- mapowanie parametrow biezacych
-			MAX_ARGS					=> MAX_ARGS										-- maksymalna liczba argumentow zadania
+			MAX_ARGS					=> MAX_ARGS,									-- maksymalna liczba argumentow zadania
+			WORD_LEN					=> WORD_LEN										-- dlugosc slowa wejsciowego
 		)
 		port map(																		-- mapowanie sygnalow do portow
 			R							=> R,												-- sygnal resetowania
