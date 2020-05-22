@@ -5,7 +5,7 @@ use		ieee.std_logic_unsigned.all;											-- dolaczenie calego pakietu 'STD_LO
 use		ieee.std_logic_misc.all;												-- dolaczenie calego pakietu 'STD_LOGIC_MISC'
 use		work.package_types.all;													-- dolaczenie pakietu z typami 
 
-entity SUM_TB is
+entity CALC_TB is
 	generic (
 		constant CLOCK_SPEED		: natural := 200_000_000;					-- czestotliwosc zegara systemowego w [Hz]
 		constant BOD				: natural := 20_000_000;					-- predkosc nadawania w [bodach]
@@ -14,9 +14,9 @@ entity SUM_TB is
 		constant STOP_LEN			: natural := 2;								-- liczba bitow stopu (1-2)
 		constant MAX_ARGS			: natural := 5									-- maksymalna liczba argumentow zadania
 	);
-end SUM_TB;
+end CALC_TB;
 
-architecture behavioural of SUM_TB is
+architecture behavioural of CALC_TB is
 
 	constant O_ZEGARA				: time := 1 sec/CLOCK_SPEED;				-- okres zegara systemowego
 	constant O_BITU				: time := 1 sec/BOD;							-- okres czasu trwania jednego bodu
