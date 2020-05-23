@@ -19,7 +19,8 @@ architecture behavioural of CALC_TB is
 
 	constant O_ZEGARA				: time := 1 sec/CLOCK_SPEED;				-- okres zegara systemowego
 	constant O_BITU				: time := 1 sec/BOD;							-- okres czasu trwania jednego bodu
-	constant zadanie 				: string := "(+521)+(-41)+(12)-36=";	-- zadanie kalkulatora
+	constant zadanie1				: string := "(+521)+(-41)+(12)-36=";	-- zadanie1 kalkulatora
+	constant zadanie2				: string := "2+2=";							-- zadanie2 kalkulatora
 	signal R							: std_logic := '0';							-- symulowany sygnal resetujacacy
 	signal C							: std_logic := '1';							-- symulowany zegar taktujacy inicjowany na '1'
 	signal RX_TX					: std_logic;									-- obserwowane wyjscie 'TX'
@@ -49,20 +50,41 @@ begin
 
 	process is																			-- proces bezwarunkowy
 	begin																					-- czesc wykonawcza procesu
-		R <= '1'; wait for 100 ns;													-- ustawienie sygnalu 'res' na '1' i odczekanie 100 ns
-		R <= '0'; wait;																-- ustawienie sygnalu 'res' na '0' i zatrzymanie
-	end process;																		-- zakonczenie procesu
-
-	process is																			-- proces bezwarunkowy
-	begin																					-- czesc wykonawcza procesu
 		C <= not(C); wait for O_ZEGARA/2;										-- zanegowanie sygnalu 'clk' i odczekanie pol okresu zegara
 	end process;																		-- zakonczenie procesu
 
 	process is																			-- proces bezwarunkowy
 	begin																					-- czesc wykonawcza procesu
+		-----------------------------------------------------------------
+		R <= '1';																		-- resetowanie ukladu
+		wait for 100 ns;																-- odczekanie
+		R <= '0';																		-- wylaczenie resetu
 		START		<= '0';																-- incjalizacja sygnalu 'START' na wartosci spoczynkowa
-		for i in 1 to zadanie'length loop										-- petla po kolenych wysylanych znakach
-			D_IN		<= CONV_STD_LOGIC_VECTOR(character'pos(zadanie(i)),D_IN'length); -- pobranie i konwersja 'i-tego' znaku ASCII
+		for i in 1 to zadanie1'length loop										-- petla po kolenych wysylanych znakach
+			D_IN		<= CONV_STD_LOGIC_VECTOR(character'pos(zadanie1(i)),D_IN'length); -- pobranie i konwersja 'i-tego' znaku ASCII
+			wait for 200 ns;															-- odczekanie 200 ns
+			START 		<= '1';														-- ustawienie 'START' na wartosc bitu START
+			PROCESSING 	<= '1';														-- ustawienie sygnalu pomocniczego na '1'
+			wait for O_BITU;															-- odczekanie jednego bodu
+			for i in 0 to WORD_LEN - 1 loop										-- petla po kolejnych bitach slowa danych 'D'
+			wait for O_BITU;															-- odczekanie jednego bodu
+			end loop;																	-- zakonczenie petli
+			START <= '0';																-- wylaczenie bitu nadawania danej
+			wait for O_BITU;															-- odczekanie jednego bodu (parzystosc)
+			for i in 0 to STOP_LEN - 1 loop										-- petla po liczbie bitow STOP
+				wait for O_BITU;														-- odczekanie jednego bodu
+			end loop;																	-- zakonczenie petli
+			PROCESSING <= '0';														-- ustawienie sygnalu pomocniczego na '0'
+			wait for 40 * O_ZEGARA;													-- odczekanie 40-stu okresow zegara
+		end loop;																		-- zakonczenie petli
+		wait for 10000 ns;
+		-----------------------------------------------------------------
+		R <= '1';																		-- resetowanie ukladu
+		wait for 100 ns;																-- odczekanie
+		R <= '0';																		-- wylaczenie resetu
+		START		<= '0';																-- incjalizacja sygnalu 'START' na wartosci spoczynkowa
+		for i in 1 to zadanie2'length loop										-- petla po kolenych wysylanych znakach
+			D_IN		<= CONV_STD_LOGIC_VECTOR(character'pos(zadanie2(i)),D_IN'length); -- pobranie i konwersja 'i-tego' znaku ASCII
 			wait for 200 ns;															-- odczekanie 200 ns
 			START 		<= '1';														-- ustawienie 'START' na wartosc bitu START
 			PROCESSING 	<= '1';														-- ustawienie sygnalu pomocniczego na '1'
@@ -79,6 +101,7 @@ begin
 			wait for 40 * O_ZEGARA;													-- odczekanie 40-stu okresow zegara
 		end loop;																		-- zakonczenie petli
 		wait;
+		-----------------------------------------------------------------
 	end process;																		-- zakonczenie procesu
 
 	SENDER_INST: entity work.SENDER												-- instancja odbiornika szeregowego 'SENDER'
