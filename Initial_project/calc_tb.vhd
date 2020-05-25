@@ -11,6 +11,7 @@ entity CALC_TB is
 		constant BOD				: natural := 20_000_000;					-- predkosc nadawania w [bodach]
 		constant WORD_LEN			: natural := 8;								-- liczba bitow slowa danych (5-8)
 		constant STOP_LEN			: natural := 2;								-- liczba bitow stopu (1-2)
+		constant WORD_LEN_RES	: natural := 32;								-- liczba bitow rezultatu
 		constant MAX_ARGS			: natural := 5									-- maksymalna liczba argumentow zadania
 	);
 end CALC_TB;
@@ -39,7 +40,7 @@ architecture behavioural of CALC_TB is
 	signal ERROR					: std_logic;									-- obserwowane wyjscie 'ERROR'
 	signal WRITING					: bit;											-- obserwowane wyjscie 'WRITING'
 	signal DONE_CALC				: std_logic;									-- obserwowane wyjscie 'DONE' kalkulatora
-	signal RESULT					: integer;										-- wynik obliczen kalkulatora
+	signal RESULT					: std_logic_vector (WORD_LEN_RES-1 downto 0) := "00000000000000000000000000000000";-- wynik obliczen kalkulatora
 	signal STATUS_OUT_CALC		: STATUSES;										-- obserwowane wyjscie 'STATUS_OUT' kalkulatora
 	signal ARGS_OUT				: TAB_I(MAX_ARGS downto 0);				-- obserowane argumenty kalkulatora
 	signal CYFRA_OUT				: natural;										-- aktualnie przetwarzana cyfra w kalkulatorze
@@ -147,7 +148,8 @@ begin
 	KALKULATOR_INST: entity work.KALKULATOR									-- instancja kalkulatora
 		generic map(																	-- mapowanie parametrow biezacych
 			MAX_ARGS					=> MAX_ARGS,									-- maksymalna liczba argumentow zadania
-			WORD_LEN					=> WORD_LEN										-- dlugosc slowa wejsciowego
+			WORD_LEN					=> WORD_LEN,									-- dlugosc slowa wejsciowego
+			WORD_LEN_RES			=> WORD_LEN_RES								-- dlugosc rezultatu
 		)
 		port map(																		-- mapowanie sygnalow do portow
 			R							=> R,												-- sygnal resetowania
