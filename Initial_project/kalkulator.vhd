@@ -6,6 +6,7 @@ use		work.package_types.all;														-- dolaczenie pakietu z typami
 entity KALKULATOR is
 	generic (
 		WORD_LEN			: natural := 8;												-- dlugosc slowa wejsciowego
+		WORD_LEN_RES	: natural := 32;												-- dlugosc slowa wyjœciowego
 		MAX_ARGS			: natural := 5													-- maksymalna liczba argumentow zadania
 	);
 	port (
@@ -15,7 +16,7 @@ entity KALKULATOR is
 		PASS				: in std_logic;												-- mozna czytac liczbe/znak
 		DONE				: out std_logic;												-- informacja o zwrocie
 		ERR_OUT	      : out std_logic;							 					-- informacja o bledzie
-		RESULT			: out integer;													-- wynik/otrzymanyznak
+		RESULT			: out std_logic_vector (WORD_LEN_RES-1 downto 0);	-- wynik/otrzymanyznak
 		STATUS_OUT		: out STATUSES;												-- wyjscie statusow
 		ARGS_OUT			: out TAB_I (MAX_ARGS downto 0);							-- lista argumentow zadania (do obserwowania)
 		OPERATIONS_OUT	: out TAB_O (MAX_ARGS downto 0)							-- lista operacji zadania (do obserowania)
@@ -42,6 +43,7 @@ architecture cialo of KALKULATOR is
 	signal OST_CYFRA	: natural := 0;												-- ostatnia wczytana cyfra
 	signal OPERATIONS	:TAB_O (MAX_ARGS downto 0) := (others => NONE);		-- tablica operacji
 	signal OPS_COUNT	: natural :=0;													-- liczba operacji
+	signal RES_TMP 	: integer range -2147483648 to 2147483647 :=0;		-- wynik tymczasowy
 begin
 	process (C, R) is
 	variable D				: natural :=0;												-- przekonwertowane wejscie
@@ -52,7 +54,7 @@ begin
 			OPS_COUNT	<= 0;
 			STATUS		<= ARGUMENTY;
 			DONE			<= '0';
-			RESULT		<= 0;
+			RES_TMP		<= 0;
 			ERR			<= '0';
 			WAS_READ		<= '0';
 			READ_NUM		<= '0';
@@ -61,6 +63,7 @@ begin
 			RESULT_FOUND<= '0';
 			OPERATIONS	<= (others => NONE);
 			ARGUMENTS 	<= (others => 0);
+			RESULT   	<= (others => 0);
 		elsif (C'event and C='1' and ERR = '0') then
 			D := CONV_INTEGER(CALC_D_IN);												-- konwersja wejscia
 			if (STATUS = ARGUMENTY) then												-- wczytywanie argumentow
@@ -139,7 +142,7 @@ begin
 							OST_CYFRA <=  D - NUM_CO;									-- zapamietanie cyfry
 							READ_NUM <='1';												-- wczytano cyfre
 					else
-						ERR <= '1';												         -- niezidentyfikowany blad
+						ERR <= '1';															-- niezidentyfikowany blad
 					end if;
 				elsif (PASS = '0') then													-- wejscie nieaktywne
 					WAS_READ <= '0';														-- reset
@@ -161,7 +164,7 @@ begin
 								RESULT_TMP := RESULT_TMP - ARGUMENTS(op);			-- odjecie kolejnego argumentu od wyniku
 							end if;
 						end loop summing;													-- koniec petli summing
-						RESULT <= RESULT_TMP;											-- przypisanie wyniku do sygnalu
+						RES_TMP <= RESULT_TMP;											-- przypisanie wyniku do sygnalu
 						RESULT_FOUND <= '1';												-- wynik zostal obliczony
 						DONE <= '1';														-- zadanie wykonane
 					end if;
@@ -174,6 +177,7 @@ begin
 		STATUS_OUT		<= STATUS;														-- przekazanie na wyjscie
 		ARGS_OUT			<= ARGUMENTS;													-- przekazanie na wyjscie
 		OPERATIONS_OUT	<= OPERATIONS;													-- przekazanie na wyjscie
+		RESULT	<= std_logic_vector(to_signed(RES_TMP, RESULT'length));	-- przekazanie na wyjscie
 	end process;
 
 end cialo;
