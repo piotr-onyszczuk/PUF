@@ -1,6 +1,7 @@
 library	IEEE;																				-- klauzula dostepu do biblioteki 'IEEE'
 use		IEEE.STD_LOGIC_1164.ALL;													-- dolaczenie calego pakietu 'STD_LOGIC_1164'
-use		ieee.std_logic_unsigned.all;												-- dolaczenie calego pakietu 'STD_LOGIC_UNSIGNED'
+use		ieee.std_logic_signed.all;												-- dolaczenie calego pakietu 'STD_LOGIC_UNSIGNED'
+use		ieee.Numeric_Std.all;												-- dolaczenie calego pakietu 'STD_LOGIC_UNSIGNED'
 use		work.package_types.all;														-- dolaczenie pakietu z typami 
 
 entity KALKULATOR is
@@ -14,6 +15,7 @@ entity KALKULATOR is
 		C					: in std_logic;												-- clock
 		R					: in std_logic;												-- reset
 		PASS				: in std_logic;												-- mozna czytac liczbe/znak
+		RECEIVED			: in std_logic := '0';										-- potwierdzenie odczytania wyniku
 		DONE				: out std_logic;												-- informacja o zwrocie
 		ERR_OUT	      : out std_logic;							 					-- informacja o bledzie
 		RESULT			: out std_logic_vector (WORD_LEN_RES-1 downto 0);	-- wynik/otrzymanyznak
@@ -49,7 +51,7 @@ begin
 	variable D				: natural :=0;												-- przekonwertowane wejscie
 	variable RESULT_TMP	: integer :=0;												-- zmienna pomocnicza do sumowania
    begin
-		if (R = '1') then																	-- resetowanie zmiennych
+		if (R = '1' or RECEIVED = '1') then											-- resetowanie zmiennych
 			ARGS_COUNT	<= 0;
 			OPS_COUNT	<= 0;
 			STATUS		<= ARGUMENTY;
@@ -63,7 +65,7 @@ begin
 			RESULT_FOUND<= '0';
 			OPERATIONS	<= (others => NONE);
 			ARGUMENTS 	<= (others => 0);
-			RESULT   	<= (others => 0);
+			RESULT   	<= (others => '0');
 		elsif (C'event and C='1' and ERR = '0') then
 			D := CONV_INTEGER(CALC_D_IN);												-- konwersja wejscia
 			if (STATUS = ARGUMENTY) then												-- wczytywanie argumentow

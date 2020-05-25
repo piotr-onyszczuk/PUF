@@ -110,7 +110,6 @@ begin																						-- poczatek czesci wykonawczej
 			else
 					TIMER		<= 1;
 					S			<= 0;
-					BUFOR		<= (others => '0');
 					STOP_P	<= 0;
 					STATUS	<= czekaj;
 					DONE		<= '0';
